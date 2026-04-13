@@ -90,60 +90,65 @@ jobs:
       run: |
         mkdir -p database output
         
-        python << 'MERGE_SCRIPT'
+        python3 -c "
         import sqlite3
         from pathlib import Path
         
-        main_db = "database/nodes.db"
-        shard_dbs = list(Path("downloaded-shards").glob("*/nodes_shard_*.db"))
+        main_db = 'database/nodes.db'
+        shard_dbs = list(Path('downloaded-shards').glob('*/nodes_shard_*.db'))
         
-        Path("database").mkdir(exist_ok=True)
+        Path('database').mkdir(exist_ok=True)
         
         if not shard_dbs:
-            print("⚠️ No shard databases found")
+            print('⚠️ No shard databases found')
             conn = sqlite3.connect(main_db)
-            conn.execute("CREATE TABLE IF NOT EXISTS nodes (id INTEGER PRIMARY KEY)")
+            conn.execute('CREATE TABLE IF NOT EXISTS nodes (id INTEGER PRIMARY KEY)')
             conn.commit()
             conn.close()
         else:
-            print(f"🔗 Merging {len(shard_dbs)} shard databases...")
+            print(f'🔗 Merging {len(shard_dbs)} shard databases...')
             from crawler.deduplicator import NodeDeduplicator
             dedup = NodeDeduplicator(main_db)
             dedup.merge_databases([str(p) for p in shard_dbs])
             stats = dedup.get_stats()
-            print(f"✅ Merge complete. Total: {stats.get('total', 0)}, Valid: {stats.get('valid', 0)}, Size: {stats.get('db_size_mb', 0):.2f} MB")
-        MERGE_SCRIPT
+            print(f'✅ Merge complete. Total: {stats.get(\"total\", 0)}, Valid: {stats.get(\"valid\", 0)}, Size: {stats.get(\"db_size_mb\", 0):.2f} MB')
+        "
         
-        python << 'MERGE_OUTPUT'
+    - name: Merge output files
+      run: |
+        python3 -c "
         from pathlib import Path
+        from datetime import datetime
         
-        output_dir = Path("output")
+        output_dir = Path('output')
         output_dir.mkdir(exist_ok=True)
         
         for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls', 'all']:
             all_links = set()
-            for sub_file in Path("downloaded-shards").glob(f"*/{proto}_sub.txt"):
+            for sub_file in Path('downloaded-shards').glob(f'*/{proto}_sub.txt'):
                 try:
                     content = sub_file.read_text(encoding='utf-8', errors='ignore')
                     links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
                     all_links.update(links)
-                except: pass
+                except:
+                    pass
             if all_links:
-                (output_dir / f"{proto}_sub.txt").write_text('\n'.join(sorted(all_links)))
-                print(f"✅ Merged {proto}_sub.txt: {len(all_links)} links")
+                (output_dir / f'{proto}_sub.txt').write_text('\n'.join(sorted(all_links)))
+                print(f'✅ Merged {proto}_sub.txt: {len(all_links)} links')
         
-        from datetime import datetime
-        stats_content = f"""# Proxy Nodes Report
-Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-Mode: 8-shard parallel merge
-
-## Summary
-- Merged from 8 shards
-- Output files generated in output/
-"""
-        (output_dir / "STATS.md").write_text(stats_content)
-        print("✅ Generated STATS.md")
-        MERGE_OUTPUT
+        stats_lines = [
+            '# Proxy Nodes Report',
+            f'Generated: {datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")}',
+            'Mode: 8-shard parallel merge',
+            '',
+            '## Summary',
+            '- Merged from 8 shards',
+            '- Output files generated in output/',
+            ''
+        ]
+        (output_dir / 'STATS.md').write_text('\n'.join(stats_lines))
+        print('✅ Generated STATS.md')
+        "
         
     - name: Fix git state before commit
       run: |
