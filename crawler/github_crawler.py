@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Super Enhanced GitHub Crawler - With Shard Support
-支持8路并行爬取的分片模式
+Super Enhanced GitHub Crawler - With Smart Deduplication
+智能去重：避免不同关键词爬取同一页面
 """
 
 import aiohttp
@@ -11,7 +11,7 @@ import re
 import base64
 import json
 import zlib
-from typing import List, Dict, Set, Optional
+from typing import List, Dict, Set, Optional, Tuple
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlparse, unquote, parse_qs
@@ -84,12 +84,22 @@ class SuperGitHubCrawler:
             self.code_queries = self.all_code_queries
             print(f"🔧 Running in single-thread mode with {len(self.repo_keywords)} keywords")
         
-        # 去重集合
-        self.seen_links: Set[str] = set()
-        self.seen_keys: Set[str] = set()
+        # 🔥 全局去重集合（避免重复爬取同一资源）
+        self.seen_repos: Set[str] = set()      # 已爬取的仓库: owner/repo
+        self.seen_files: Set[str] = set()      # 已爬取的文件: owner/repo/path@ref
+        self.seen_links: Set[str] = set()      # 已提取的节点链接
+        self.seen_keys: Set[str] = set()       # 节点去重key
+        
+        # 🔥 统计信息
+        self.stats = {
+            'repos_searched': 0,
+            'repos_crawled': 0,
+            'files_skipped': 0,
+            'nodes_extracted': 0,
+        }
         
     def _get_shard_keywords(self, shard_id: int) -> list:
-        """根据分片ID分配关键词"""
+        """根据分片ID分配关键词（减少重叠）"""
         shards = {
             0: ["vless reality", "vless vision", "vless enc", "vless xhttp", "xray vless", "sing-box vless", "vless subscription", "filename:config.json vless", "path:*.json reality"],
             1: ["hysteria2", "hysteria 2", "hy2", "hy2 config", "hysteria2 subscription", "filename:*.yaml hysteria", "extension:yaml hy2", "hysteria2 server"],
@@ -110,6 +120,14 @@ class SuperGitHubCrawler:
         
     def _make_key(self, link: str, source: str) -> str:
         return hashlib.md5(f"{link}:{source}".encode()).hexdigest()
+    
+    def _make_file_key(self, owner: str, repo: str, path: str, ref: str = "main") -> str:
+        """生成文件的唯一key，用于去重"""
+        return f"{owner}/{repo}/{path}@{ref}".lower()
+    
+    def _make_repo_key(self, owner: str, repo: str) -> str:
+        """生成仓库的唯一key"""
+        return f"{owner}/{repo}".lower()
     
     def _is_valid_link(self, link: str) -> bool:
         if not link or len(link) < 30:
@@ -228,6 +246,24 @@ class SuperGitHubCrawler:
         except: pass
         return ""
     
+    def _should_crawl_file(self, owner: str, repo: str, path: str, ref: str = "main") -> bool:
+        """🔥 智能去重：检查文件是否已爬取过"""
+        file_key = self._make_file_key(owner, repo, path, ref)
+        if file_key in self.seen_files:
+            self.stats['files_skipped'] += 1
+            return False
+        self.seen_files.add(file_key)
+        return True
+    
+    def _should_crawl_repo(self, owner: str, repo: str) -> bool:
+        """检查仓库是否已处理过（用于统计）"""
+        repo_key = self._make_repo_key(owner, repo)
+        if repo_key not in self.seen_repos:
+            self.seen_repos.add(repo_key)
+            self.stats['repos_crawled'] += 1
+            return True
+        return False
+    
     async def extract_nodes(self, content: str, source: str, source_type: str) -> List[Dict]:
         nodes = []
         
@@ -265,6 +301,10 @@ class SuperGitHubCrawler:
         owner, repo_name = repo["owner"]["login"], repo["name"]
         default_branch = repo.get("default_branch", "main")
         
+        # 🔥 检查仓库是否已爬取
+        if not self._should_crawl_repo(owner, repo_name):
+            return []
+        
         contents = await self.get_repo_contents(owner, repo_name, "")
         if not contents: return nodes
             
@@ -273,10 +313,17 @@ class SuperGitHubCrawler:
             name = item["name"].lower()
             if not any(name.endswith(ext) for ext in ['.json', '.yaml', '.yml', '.txt', '.conf', '.list', '.md', '.sub', '.subscribe']):
                 continue
+            
+            # 🔥 关键：检查文件是否已爬取（避免不同关键词搜到同一文件）
+            if not self._should_crawl_file(owner, repo_name, item["path"], default_branch):
+                continue
+                
             content = await self.get_raw_content(owner, repo_name, item["path"], default_branch)
             if content and len(content) > 100:
                 extracted = await self.extract_nodes(content, f"{owner}/{repo_name}", 'github_repo')
-                nodes.extend(extracted)
+                if extracted:
+                    self.stats['nodes_extracted'] += len(extracted)
+                    nodes.extend(extracted)
         return nodes
     
     async def crawl_from_repos(self) -> List[Dict]:
@@ -286,6 +333,7 @@ class SuperGitHubCrawler:
         for keyword in self.repo_keywords:
             print(f"  🔍 Searching: {keyword}")
             repos = await self.search_repositories(keyword, max_pages=10)
+            self.stats['repos_searched'] += len(repos)
             
             for repo in repos:
                 try:
@@ -301,6 +349,8 @@ class SuperGitHubCrawler:
                     print(f"    ✅ {repo['full_name']}: {len(repo_nodes)} nodes")
                     all_nodes.extend(repo_nodes)
             await asyncio.sleep(0.3)
+        
+        print(f"  📊 Repo crawl stats: searched={self.stats['repos_searched']}, crawled={self.stats['repos_crawled']}, files_skipped={self.stats['files_skipped']}")
         return all_nodes
     
     async def crawl_from_code(self) -> List[Dict]:
@@ -321,17 +371,24 @@ class SuperGitHubCrawler:
                     repo = item['repository']['name']
                     path = item['path']
                     ref = item.get('git_url', '').split('/')[-1] or 'main'
+                    
                     if item.get('size', 0) > 500 * 1024: continue
+                    
+                    # 🔥 关键：检查文件是否已爬取
+                    if not self._should_crawl_file(owner, repo, path, ref):
+                        continue
+                        
                     content = await self.get_raw_content(owner, repo, path, ref)
                     if content and len(content) > 100:
                         extracted = await self.extract_nodes(content, f"{owner}/{repo}", 'github_code')
-                        all_nodes.extend(extracted)
+                        if extracted:
+                            self.stats['nodes_extracted'] += len(extracted)
+                            all_nodes.extend(extracted)
                 except: continue
             await asyncio.sleep(1)
         return all_nodes
     
     async def crawl_from_gists(self) -> List[Dict]:
-        # 分片模式跳过 Gist 爬取以节省时间
         if self.shard_id >= 0:
             return []
         return []
@@ -357,7 +414,9 @@ class SuperGitHubCrawler:
         print(f"  📦 Repos: {len(repo_nodes)} nodes")
         print(f"  💻 Code: {len(code_nodes)} nodes")
         print(f"  📝 Gists: {len(gist_nodes)} nodes")
-        print(f"  🔗 Total unique: {len(self.seen_links)} links")
+        print(f"  🔗 Total unique links: {len(self.seen_links)}")
+        print(f"  🗂️  Repos crawled: {self.stats['repos_crawled']}")
+        print(f"  📄 Files skipped (dedup): {self.stats['files_skipped']}")
         
         return all_nodes
     
@@ -368,3 +427,12 @@ class SuperGitHubCrawler:
             if data:
                 return data if isinstance(data, list) else [data]
         return []
+    
+    def get_crawl_stats(self) -> Dict:
+        """获取爬取统计信息"""
+        return {
+            **self.stats,
+            'unique_links': len(self.seen_links),
+            'unique_repos': len(self.seen_repos),
+            'unique_files': len(self.seen_files),
+        }
