@@ -28,7 +28,7 @@ async def main():
     # 初始化组件
     github_token = os.getenv("GITHUB_TOKEN", "")
     crawler = SimpleGitHubCrawler(github_token)
-    validator = NodeValidator(concurrent_limit=30, timeout=5)
+    validator = NodeValidator(concurrent_limit=100, timeout=8)
     deduplicator = NodeDeduplicator()
     
     try:
