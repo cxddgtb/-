@@ -26,11 +26,20 @@ Thumbs.db
 .env
 .env.local
 
-# 🔥 不提交数据库文件（超过100MB限制）
+# 🔥 数据库文件 - 绝对不提交
 database/*.db
 database/*.sqlite
 database/*.sqlite3
+database/*.db-shm
+database/*.db-wal
 !.gitkeep
+
+# 🔥 临时目录
+downloaded-shards/
+shard-*/
+merged-logs/
+*.tmp
+*.temp
 
 # 日志
 logs/*.log
