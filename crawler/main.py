@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Main Entry Point - Fixed Import
+Main Entry Point - Proxy Node Crawler
 """
 
 import asyncio
@@ -13,7 +13,6 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-# ✅ 修复：导入正确的类名
 from crawler.github_crawler import SuperGitHubCrawler
 from crawler.validator import NodeValidator
 from crawler.deduplicator import NodeDeduplicator
@@ -26,56 +25,49 @@ async def main():
     print("🚀 Starting Proxy Node Crawler")
     print("=" * 60)
     
-    # 初始化组件
     github_token = os.getenv("GITHUB_TOKEN", "")
-    
-    # ✅ 修复：使用正确的类名
     crawler = SuperGitHubCrawler(github_token)
     validator = NodeValidator(concurrent_limit=100, timeout=8)
     deduplicator = NodeDeduplicator()
     
     try:
         # 爬取节点
-        print("🕷️  Crawling nodes from multiple sources...")
+        print("🕷️  Crawling nodes...")
         all_nodes = await crawler.crawl_all()
         print(f"📊 Total crawled: {len(all_nodes)} nodes")
         
         if not all_nodes:
-            print("⚠️  No nodes found! Check search queries and GitHub API access.")
+            print("⚠️  No nodes found!")
             return
         
         # 去重
         stats = deduplicator.add_or_update_nodes(all_nodes)
-        print(f"🧹 Deduplication: {stats}")
+        print(f"🧹 Dedup: {stats}")
         
-        # 验证节点
-        print("🔍 Validating nodes...")
-        pending_nodes = deduplicator.get_recent_nodes(limit=300)
-        
+        # 验证
+        print("🔍 Validating...")
+        pending = deduplicator.get_recent_nodes(limit=300)
         valid_nodes = []
-        if pending_nodes:
-            validation_results = await validator.validate_nodes_batch(pending_nodes)
+        
+        if pending:
+            results = await validator.validate_nodes_batch(pending)
             valid_results = []
-            for result in validation_results:
-                if hasattr(result, 'node_link'):
+            for r in results:
+                if hasattr(r, 'node_link'):
                     valid_results.append({
-                        'link': result.node_link,
-                        'protocol': result.protocol,
-                        'is_valid': result.is_valid,
-                        'latency_ms': result.latency_ms,
+                        'link': r.node_link,
+                        'protocol': r.protocol,
+                        'is_valid': r.is_valid,
+                        'latency_ms': r.latency_ms,
                     })
-            
             deduplicator.update_validation_results(valid_results)
-            valid_nodes = validator.filter_valid_nodes(validation_results, max_latency=500.0)
-            print(f"✅ Valid nodes: {len(valid_nodes)}")
-        else:
-            print("⚠️  No pending nodes to validate")
+            valid_nodes = validator.filter_valid_nodes(results, max_latency=500.0)
+            print(f"✅ Valid: {len(valid_nodes)}")
         
         # 生成输出
         output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
         
-        # 按协议分类
         by_protocol = {}
         for node in valid_nodes:
             proto = node.get('protocol', 'unknown')
@@ -83,7 +75,6 @@ async def main():
                 by_protocol[proto] = []
             by_protocol[proto].append(node)
         
-        # 保存文件
         for protocol, nodes in by_protocol.items():
             if nodes:
                 links = [n.get('link', '') for n in nodes if n.get('link')]
@@ -92,7 +83,6 @@ async def main():
                     save_to_file(output_dir / f"{protocol}_nodes.json", 
                                json.dumps(nodes, indent=2, ensure_ascii=False))
         
-        # 合并文件
         all_links = []
         for nodes in by_protocol.values():
             all_links.extend([n.get('link', '') for n in nodes if n.get('link')])
@@ -112,12 +102,14 @@ By protocol:
 """
         for proto, nodes in by_protocol.items():
             report += f"- {proto}: {len(nodes)}\n"
-        
         save_to_file(output_dir / "STATS.md", report)
-        print(f"📁 Output saved to {output_dir}")
-        print("=" * 60)
-        print("🎉 Crawler completed successfully!")
-        print("=" * 60)
+        
+        # 🔥 自动清理数据库，控制大小
+        db_size = deduplicator.auto_cleanup(max_total_nodes=30000, max_age_days=7)
+        print(f"🗄️  DB size: {db_size} MB")
+        
+        print(f"📁 Output: {output_dir}")
+        print("🎉 Done!")
         
     except Exception as e:
         print(f"❌ Error: {e}")
