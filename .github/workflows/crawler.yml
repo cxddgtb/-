@@ -1,4 +1,4 @@
-name: Proxy Node Crawler (Parallel 8x)
+name: Proxy Node Crawler (Parallel 8x - Optimized)
 
 on:
   schedule:
@@ -8,14 +8,21 @@ on:
 permissions:
   contents: write
 
+# 🔥 全局设置：不设置默认超时
+defaults:
+  run:
+    shell: bash
+
 jobs:
   # 🔥 阶段1: 8个并行爬虫实例
   crawl-shards:
     strategy:
       matrix:
         shard: [0, 1, 2, 3, 4, 5, 6, 7]
-      fail-fast: false
+      fail-fast: false  # 一个失败不影响其他
     runs-on: ubuntu-latest
+    # 🔥 移除 timeout-minutes，让爬取自然完成
+    # timeout-minutes: 60  ← 已删除
     
     steps:
     - name: Checkout
@@ -63,6 +70,8 @@ jobs:
     needs: crawl-shards
     runs-on: ubuntu-latest
     if: always()
+    # 🔥 合并阶段也不设超时
+    # timeout-minutes: 30  ← 已删除
     
     steps:
     - name: Checkout
@@ -92,7 +101,7 @@ jobs:
       run: |
         mkdir -p database output
         
-        # 🔥 合并数据库
+        # 合并数据库
         python << 'MERGE_SCRIPT'
         import sqlite3
         from pathlib import Path
@@ -117,14 +126,13 @@ jobs:
             print(f"✅ Merge complete. Total: {stats.get('total', 0)}, Valid: {stats.get('valid', 0)}, Size: {stats.get('db_size_mb', 0):.2f} MB")
         MERGE_SCRIPT
         
-        # 🔥 合并输出文件
+        # 合并输出文件
         python << 'MERGE_OUTPUT'
         from pathlib import Path
         
         output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
         
-        # 合并订阅文件（去重）
         for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls', 'all']:
             all_links = set()
             for sub_file in Path("downloaded-shards").glob(f"*/{proto}_sub.txt"):
@@ -137,7 +145,6 @@ jobs:
                 (output_dir / f"{proto}_sub.txt").write_text('\n'.join(sorted(all_links)))
                 print(f"✅ Merged {proto}_sub.txt: {len(all_links)} links")
         
-        # 生成合并统计
         from datetime import datetime
         stats_content = f"""# Proxy Nodes Report
 Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
@@ -151,16 +158,11 @@ Mode: 8-shard parallel merge
         print("✅ Generated STATS.md")
         MERGE_OUTPUT
         
-    - name: 🔥 Fix git state before commit (关键修复)
+    - name: Fix git state before commit
       run: |
-        # 确保数据库文件不被追踪
         git update-index --assume-unchanged database/nodes.db 2>/dev/null || true
         git reset database/nodes.db 2>/dev/null || true
-        
-        # 清理临时目录
         rm -rf downloaded-shards/ shard-*/ 2>/dev/null || true
-        
-        # 只添加输出文件（明确指定，避免误加）
         git add output/*.txt output/*.json output/*.md 2>/dev/null || true
         
     - name: Commit merged results
@@ -168,7 +170,6 @@ Mode: 8-shard parallel merge
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 检查是否有实际变更
         if ! git diff --cached --quiet; then
           echo "📝 Changes detected, committing..."
           git commit -m "chore: merge 8-shard crawl results $(date '+%Y-%m-%d %H:%M')"
