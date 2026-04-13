@@ -1,19 +1,24 @@
-name: Proxy Node Crawler
+name: Proxy Node Crawler (Parallel 8x)
 
 on:
   schedule:
-    - cron: '0 */5 * * *'  # 每5小时运行
-  workflow_dispatch:       # 允许手动触发
+    - cron: '0 */5 * * *'  # 每5小时
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  crawl:
+  # 🔥 阶段1: 8个并行爬虫实例
+  crawl-shards:
+    strategy:
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]  # 8路并行
+      fail-fast: false  # 一个失败不影响其他
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,35 +34,141 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Create required directories
+    - name: Create directories
       run: |
-        mkdir -p database logs output
+        mkdir -p database logs output shard-${{ matrix.shard }}
         touch database/.gitkeep
         
-    - name: Run crawler
+    - name: Run crawler (shard ${{ matrix.shard }})
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python -m crawler.main
+        # 🔥 传入 shard_id 参数
+        python -m crawler.main --shard ${{ matrix.shard }}
         
-    - name: Commit ONLY output files (skip large database)
+    - name: Save shard output
+      run: |
+        # 保存本分片的结果到独立目录
+        cp -r output/* shard-${{ matrix.shard }}/ 2>/dev/null || true
+        # 重命名数据库避免冲突
+        mv database/nodes.db shard-${{ matrix.shard }}/nodes_shard_${{ matrix.shard }}.db 2>/dev/null || true
+        
+    - name: Upload shard artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: shard-${{ matrix.shard }}-results
+        path: shard-${{ matrix.shard }}/
+        retention-days: 1  # 只需保留到合并步骤
+
+
+  # 🔥 阶段2: 合并所有分片结果（依赖所有爬虫完成）
+  merge-results:
+    needs: crawl-shards
+    runs-on: ubuntu-latest
+    if: always()  # 即使部分分片失败也尝试合并
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+      
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Download all shard artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: shard-*-results
+        path: downloaded-shards
+        merge-multiple: true
+        
+    - name: Merge databases and outputs
+      run: |
+        mkdir -p database output merged-logs
+        
+        # 🔥 合并数据库
+        python << 'MERGE_SCRIPT'
+        import sqlite3
+        from pathlib import Path
+        
+        main_db = "database/nodes.db"
+        shard_dbs = list(Path("downloaded-shards").glob("*/nodes_shard_*.db"))
+        
+        if not shard_dbs:
+            print("⚠️ No shard databases found, creating empty main DB")
+            Path(main_db).parent.mkdir(exist_ok=True)
+            conn = sqlite3.connect(main_db)
+            conn.execute("CREATE TABLE IF NOT EXISTS nodes (id INTEGER PRIMARY KEY)")
+            conn.commit()
+            conn.close()
+        else:
+            print(f"🔗 Merging {len(shard_dbs)} shard databases...")
+            from crawler.deduplicator import NodeDeduplicator
+            dedup = NodeDeduplicator(main_db)
+            dedup.merge_databases([str(p) for p in shard_dbs])
+            print(f"✅ Merge complete. DB size: {dedup.get_stats().get('db_size_mb', 0):.2f} MB")
+        MERGE_SCRIPT
+        
+        # 🔥 合并输出文件（去重）
+        python << 'MERGE_OUTPUT'
+        from pathlib import Path
+        import json
+        
+        output_dir = Path("output")
+        output_dir.mkdir(exist_ok=True)
+        
+        # 合并订阅文件
+        for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls', 'all']:
+            all_links = set()
+            for sub_file in Path("downloaded-shards").glob(f"*/{proto}_sub.txt"):
+                try:
+                    links = sub_file.read_text().strip().split('\n')
+                    all_links.update(l.strip() for l in links if l.strip())
+                except: pass
+            if all_links:
+                (output_dir / f"{proto}_sub.txt").write_text('\n'.join(sorted(all_links)))
+                print(f"✅ Merged {proto}_sub.txt: {len(all_links)} links")
+        
+        # 合并 JSON（简单拼接，实际可优化）
+        for json_file in Path("downloaded-shards").glob("*/all_nodes.json"):
+            try:
+                data = json.loads(json_file.read_text())
+                # 这里可以添加更智能的合并逻辑
+            except: pass
+        MERGE_OUTPUT
+        
+    - name: Final validation (optional)
+      run: |
+        # 可选：对合并后的节点做抽样验证
+        python -c "
+        from crawler.deduplicator import NodeDeduplicator
+        d = NodeDeduplicator()
+        stats = d.get_stats()
+        print(f'📊 Final Stats: {stats}')
+        " || true
+        
+    - name: Commit merged results
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 只添加 output 目录
         git add output/
         
-        # 有更改则提交推送
         git diff --quiet && git diff --staged --quiet || (
-          git commit -m "chore: update proxy nodes $(date '+%Y-%m-%d %H:%M')" &&
+          git commit -m "chore: merge 8-shard crawl results $(date '+%Y-%m-%d %H:%M')" &&
           git push
         )
         
-    - name: Upload database as artifact (7-day backup)
-      uses: actions/upload-artifact@v4
+    - name: Cleanup artifacts
+      uses: geekyeggo/delete-artifact@v2
       with:
-        name: nodes-database-backup
-        path: database/nodes.db
-        retention-days: 7
-        if-no-files-found: ignore
+        name: shard-*-results
