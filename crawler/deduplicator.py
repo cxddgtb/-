@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Deduplicator Module
+Node Deduplicator Module
 节点去重和时效性管理
 """
 
@@ -11,9 +11,6 @@ import hashlib
 from typing import List, Dict, Optional
 from datetime import datetime, timedelta
 from pathlib import Path
-from crawler.utils import setup_logger
-
-logger = setup_logger(__name__)
 
 class NodeDeduplicator:
     """节点去重和时效性管理器"""
@@ -33,6 +30,7 @@ class NodeDeduplicator:
                     link TEXT NOT NULL,
                     protocol TEXT NOT NULL,
                     source_repo TEXT,
+                    source_type TEXT DEFAULT 'unknown',
                     first_seen TEXT NOT NULL,
                     last_seen TEXT NOT NULL,
                     last_validated TEXT,
@@ -43,28 +41,19 @@ class NodeDeduplicator:
                     metadata TEXT
                 )
             """)
-            conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_protocol 
-                ON nodes(protocol)
-            """)
-            conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_last_validated 
-                ON nodes(last_validated)
-            """)
-            conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_is_valid 
-                ON nodes(is_valid)
-            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_protocol ON nodes(protocol)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_last_validated ON nodes(last_validated)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_is_valid ON nodes(is_valid)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_source ON nodes(source_type)")
             conn.commit()
     
     def get_node_hash(self, link: str) -> str:
         """生成节点链接的哈希值"""
-        # 标准化链接（去除可能的参数差异）
         normalized = link.strip().lower()
         return hashlib.md5(normalized.encode()).hexdigest()
     
     def add_or_update_nodes(self, nodes: List[Dict]) -> Dict[str, int]:
-        """添加或更新节点，返回统计信息"""
+        """添加或更新节点"""
         stats = {'new': 0, 'updated': 0, 'duplicates': 0}
         
         with sqlite3.connect(self.db_path) as conn:
@@ -78,37 +67,35 @@ class NodeDeduplicator:
                     
                 link_hash = self.get_node_hash(link)
                 protocol = node.get('protocol', 'unknown')
-                source_repo = node.get('source_repo', '')
+                source_repo = node.get('source', node.get('source_repo', ''))
+                source_type = node.get('source_type', 'unknown')
                 
-                # 检查是否已存在
                 cursor.execute(
-                    "SELECT id, validation_count, success_count FROM nodes WHERE link_hash = ?",
+                    "SELECT id FROM nodes WHERE link_hash = ?",
                     (link_hash,)
                 )
                 existing = cursor.fetchone()
                 
                 if existing:
-                    # 更新现有节点
                     cursor.execute("""
                         UPDATE nodes SET 
                             last_seen = ?,
                             source_repo = ?,
+                            source_type = ?,
                             metadata = ?
                         WHERE link_hash = ?
-                    """, (now, source_repo, json.dumps(node), link_hash))
+                    """, (now, source_repo, source_type, json.dumps(node), link_hash))
                     stats['updated'] += 1
                 else:
-                    # 插入新节点
                     cursor.execute("""
                         INSERT INTO nodes 
-                        (link_hash, link, protocol, source_repo, first_seen, last_seen, metadata)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
-                    """, (link_hash, link, protocol, source_repo, now, now, json.dumps(node)))
+                        (link_hash, link, protocol, source_repo, source_type, first_seen, last_seen, metadata)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (link_hash, link, protocol, source_repo, source_type, now, now, json.dumps(node)))
                     stats['new'] += 1
             
             conn.commit()
             
-        logger.info(f"Deduplication stats: {stats}")
         return stats
     
     def update_validation_results(self, results: List[Dict]):
@@ -123,8 +110,8 @@ class NodeDeduplicator:
                     continue
                     
                 link_hash = self.get_node_hash(link)
-                is_valid = result.get('is_valid', False)
-                latency = result.get('latency_ms', 0)
+                is_valid = 1 if result.get('is_valid', False) else 0
+                latency = result.get('latency_ms', 0) or 0
                 
                 cursor.execute("""
                     UPDATE nodes SET 
@@ -141,24 +128,23 @@ class NodeDeduplicator:
     def get_valid_nodes(self, protocol: str = None, 
                        max_age_days: int = 7,
                        min_success_rate: float = 0.5,
-                       max_latency: float = 300.0) -> List[Dict]:
+                       max_latency: float = 500.0) -> List[Dict]:
         """获取有效节点"""
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
-            query = """
+            query = f"""
                 SELECT * FROM nodes 
                 WHERE is_valid = 1
-                AND last_validated >= datetime('now', '-{} days')
-                AND latency_ms > 0 AND latency_ms <= {}
-            """.format(max_age_days, max_latency)
+                AND last_validated >= datetime('now', '-{max_age_days} days')
+                AND latency_ms > 0 AND latency_ms <= {max_latency}
+            """
             
+            params = ()
             if protocol:
                 query += " AND protocol = ?"
                 params = (protocol,)
-            else:
-                params = ()
                 
             query += " ORDER BY latency_ms ASC, last_validated DESC"
             
@@ -168,27 +154,24 @@ class NodeDeduplicator:
             nodes = []
             for row in rows:
                 node = dict(row)
-                # 计算成功率
                 if node['validation_count'] > 0:
                     node['success_rate'] = node['success_count'] / node['validation_count']
                 else:
                     node['success_rate'] = 0
-                    
-                # 过滤低成功率节点
                 if node['success_rate'] >= min_success_rate:
                     nodes.append(node)
                     
             return nodes
     
-    def get_recent_nodes(self, protocol: str = None, limit: int = 100) -> List[Dict]:
-        """获取最近添加的节点（尚未验证）"""
+    def get_recent_nodes(self, protocol: str = None, limit: int = 300) -> List[Dict]:
+        """获取待验证节点"""
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
             query = """
                 SELECT * FROM nodes 
-                WHERE last_validated IS NULL
+                WHERE last_validated IS NULL OR last_validated < datetime('now', '-3 days')
             """
             params = ()
             
@@ -202,71 +185,68 @@ class NodeDeduplicator:
             cursor.execute(query, params)
             return [dict(row) for row in cursor.fetchall()]
     
-    def auto_cleanup(self, max_total_nodes: int = 50000, max_age_days: int = 7):
-    """自动清理：保持数据库在合理大小"""
-    with sqlite3.connect(self.db_path) as conn:
-        cursor = conn.cursor()
-        
-        # 1. 删除超过最大天数的无效节点
-        cursor.execute("""
-            DELETE FROM nodes 
-            WHERE is_valid = 0 
-            AND last_validated < datetime('now', '-{} days')
-        """.format(min(max_age_days, 3)))
-        
-        # 2. 如果总数超限，删除最旧的无效节点
-        cursor.execute("SELECT COUNT(*) FROM nodes")
-        total = cursor.fetchone()[0]
-        
-        if total > max_total_nodes:
-            excess = total - max_total_nodes
+    def auto_cleanup(self, max_total_nodes: int = 30000, max_age_days: int = 7):
+        """🔥 自动清理：控制数据库大小"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            
+            # 1. 删除超过3天的无效节点
             cursor.execute("""
                 DELETE FROM nodes 
-                WHERE id IN (
-                    SELECT id FROM nodes 
-                    WHERE is_valid = 0 
-                    ORDER BY last_validated ASC 
-                    LIMIT ?
-                )
-            """, (excess,))
-            logger.info(f"Cleaned {cursor.rowcount} old nodes to stay under limit")
-        
-        # 3. 压缩数据库（释放空间）
-        cursor.execute("VACUUM")
-        conn.commit()
-        
-        # 返回当前大小
-        db_size = Path(self.db_path).stat().st_size / 1024 / 1024  # MB
-        logger.info(f"Database size after cleanup: {db_size:.2f} MB")
-        return db_size
+                WHERE is_valid = 0 
+                AND last_validated < datetime('now', '-3 days')
+            """)
+            
+            # 2. 如果总数超限，删除最旧的节点
+            cursor.execute("SELECT COUNT(*) FROM nodes")
+            total = cursor.fetchone()[0]
+            
+            if total > max_total_nodes:
+                excess = total - max_total_nodes
+                cursor.execute("""
+                    DELETE FROM nodes 
+                    WHERE id IN (
+                        SELECT id FROM nodes 
+                        ORDER BY last_seen ASC 
+                        LIMIT ?
+                    )
+                """, (excess,))
+            
+            # 3. 压缩数据库
+            cursor.execute("VACUUM")
+            conn.commit()
+            
+            # 返回当前大小（MB）
+            db_size = self.db_path.stat().st_size / 1024 / 1024 if self.db_path.exists() else 0
+            return round(db_size, 2)
     
     def get_stats(self) -> Dict:
-        """获取数据库统计信息"""
+        """获取统计信息"""
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             
             stats = {}
-            
-            # 总数
             cursor.execute("SELECT COUNT(*) FROM nodes")
             stats['total'] = cursor.fetchone()[0]
             
-            # 有效节点数
             cursor.execute("SELECT COUNT(*) FROM nodes WHERE is_valid = 1")
             stats['valid'] = cursor.fetchone()[0]
             
-            # 按协议统计
             cursor.execute("""
                 SELECT protocol, COUNT(*) as count,
                        SUM(CASE WHEN is_valid = 1 THEN 1 ELSE 0 END) as valid_count
-                FROM nodes 
-                GROUP BY protocol
+                FROM nodes GROUP BY protocol
             """)
             stats['by_protocol'] = {row[0]: {'total': row[1], 'valid': row[2]} 
                                    for row in cursor.fetchall()}
             
-            # 最近验证时间
             cursor.execute("SELECT MAX(last_validated) FROM nodes")
             stats['last_validation'] = cursor.fetchone()[0]
             
+            # 数据库大小
+            if self.db_path.exists():
+                stats['db_size_mb'] = round(self.db_path.stat().st_size / 1024 / 1024, 2)
+            else:
+                stats['db_size_mb'] = 0
+                
             return stats
