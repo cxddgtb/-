@@ -1,11 +1,9 @@
-# .github/workflows/crawler.yml
-
 name: Proxy Node Crawler
 
 on:
   schedule:
-    - cron: '0 */5 * * *'  # 每5小时
-  workflow_dispatch:
+    - cron: '0 */5 * * *'  # 每5小时运行
+  workflow_dispatch:       # 允许手动触发
 
 permissions:
   contents: write
@@ -15,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,10 +29,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Create directories
+    - name: Create required directories
       run: |
         mkdir -p database logs output
-        touch database/.gitkeep  # 保持目录结构
+        touch database/.gitkeep
         
     - name: Run crawler
       env:
@@ -43,25 +41,24 @@ jobs:
       run: |
         python -m crawler.main
         
-    - name: Commit ONLY output files (not database)
+    - name: Commit ONLY output files (skip large database)
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 🔥 只添加 output 目录，排除 database
+        # 只添加 output 目录
         git add output/
         
-        # 如果有更改则提交
+        # 有更改则提交推送
         git diff --quiet && git diff --staged --quiet || (
           git commit -m "chore: update proxy nodes $(date '+%Y-%m-%d %H:%M')" &&
           git push
         )
         
-    - name: Upload artifacts (optional backup)
+    - name: Upload database as artifact (7-day backup)
       uses: actions/upload-artifact@v4
       with:
-        name: proxy-nodes-backup
-        path: |
-          output/
-          database/nodes.db  # 作为 artifact 保存7天，不提交到仓库
+        name: nodes-database-backup
+        path: database/nodes.db
         retention-days: 7
+        if-no-files-found: ignore
