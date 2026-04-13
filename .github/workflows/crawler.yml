@@ -1,26 +1,25 @@
-name: Proxy Node Crawler (Enhanced)
+name: Proxy Node Crawler
 
 on:
   schedule:
-    # 每5小时运行一次
-    - cron: '0 */5 * * *'
+    - cron: '0 */5 * * *'  # 每5小时
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  crawl-and-validate:
+  crawl:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
       
-    - name: Set up Python
+    - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
@@ -30,30 +29,22 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Create database directory
-      run: mkdir -p database
+    - name: Create directories
+      run: |
+        mkdir -p database logs output
         
-    - name: Run crawler with validation
+    - name: Run crawler
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python -m crawler.main
         
-    - name: Commit database and output
+    - name: Commit results
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add output/ database/
         git diff --quiet && git diff --staged --quiet || (
-          git commit -m "Update nodes $(date '+%Y-%m-%d %H:%M') - $(grep 'valid' output/STATS.md | head -1)" &&
+          git commit -m "chore: update nodes $(date '+%Y-%m-%d %H:%M')" &&
           git push
         )
-        
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: proxy-nodes-validated
-        path: |
-          output/
-          database/
-        retention-days: 7
