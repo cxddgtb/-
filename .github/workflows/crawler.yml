@@ -1,4 +1,4 @@
-name: Proxy Node Crawler (Parallel 8x - Optimized)
+name: Proxy Node Crawler (Parallel 8x)
 
 on:
   schedule:
@@ -8,21 +8,13 @@ on:
 permissions:
   contents: write
 
-# 🔥 全局设置：不设置默认超时
-defaults:
-  run:
-    shell: bash
-
 jobs:
-  # 🔥 阶段1: 8个并行爬虫实例
   crawl-shards:
     strategy:
       matrix:
         shard: [0, 1, 2, 3, 4, 5, 6, 7]
-      fail-fast: false  # 一个失败不影响其他
+      fail-fast: false
     runs-on: ubuntu-latest
-    # 🔥 移除 timeout-minutes，让爬取自然完成
-    # timeout-minutes: 60  ← 已删除
     
     steps:
     - name: Checkout
@@ -65,13 +57,10 @@ jobs:
         retention-days: 1
 
 
-  # 🔥 阶段2: 合并所有分片结果
   merge-results:
     needs: crawl-shards
     runs-on: ubuntu-latest
     if: always()
-    # 🔥 合并阶段也不设超时
-    # timeout-minutes: 30  ← 已删除
     
     steps:
     - name: Checkout
@@ -101,7 +90,6 @@ jobs:
       run: |
         mkdir -p database output
         
-        # 合并数据库
         python << 'MERGE_SCRIPT'
         import sqlite3
         from pathlib import Path
@@ -126,7 +114,6 @@ jobs:
             print(f"✅ Merge complete. Total: {stats.get('total', 0)}, Valid: {stats.get('valid', 0)}, Size: {stats.get('db_size_mb', 0):.2f} MB")
         MERGE_SCRIPT
         
-        # 合并输出文件
         python << 'MERGE_OUTPUT'
         from pathlib import Path
         
