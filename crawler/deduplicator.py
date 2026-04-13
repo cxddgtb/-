@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Node Deduplicator Module
-节点去重和时效性管理
+Node Deduplicator Module - Fixed Schema Migration
+节点去重和时效性管理（支持字段自动迁移）
 """
 
 import sqlite3
@@ -21,9 +21,12 @@ class NodeDeduplicator:
         self._init_database()
         
     def _init_database(self):
-        """初始化数据库"""
+        """初始化数据库 + 自动迁移旧表结构"""
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
+            cursor = conn.cursor()
+            
+            # 1. 创建主表（如果不存在）
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS nodes (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     link_hash TEXT UNIQUE NOT NULL,
@@ -41,10 +44,38 @@ class NodeDeduplicator:
                     metadata TEXT
                 )
             """)
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_protocol ON nodes(protocol)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_last_validated ON nodes(last_validated)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_is_valid ON nodes(is_valid)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_source ON nodes(source_type)")
+            
+            # 2. 🔥 检查并添加缺失的字段（兼容旧数据库）
+            cursor.execute("PRAGMA table_info(nodes)")
+            existing_columns = [col[1] for col in cursor.fetchall()]
+            
+            # 添加缺失的 source_type 字段
+            if 'source_type' not in existing_columns:
+                print("🔧 Migrating database: adding source_type column")
+                cursor.execute("ALTER TABLE nodes ADD COLUMN source_type TEXT DEFAULT 'unknown'")
+            
+            # 添加缺失的 metadata 字段（如果之前版本没有）
+            if 'metadata' not in existing_columns:
+                print("🔧 Migrating database: adding metadata column")
+                cursor.execute("ALTER TABLE nodes ADD COLUMN metadata TEXT")
+            
+            # 3. 创建索引（使用 try-except 避免重复创建报错）
+            indexes = [
+                "CREATE INDEX IF NOT EXISTS idx_protocol ON nodes(protocol)",
+                "CREATE INDEX IF NOT EXISTS idx_last_validated ON nodes(last_validated)",
+                "CREATE INDEX IF NOT EXISTS idx_is_valid ON nodes(is_valid)",
+                "CREATE INDEX IF NOT EXISTS idx_source ON nodes(source_type)",
+                "CREATE INDEX IF NOT EXISTS idx_link_hash ON nodes(link_hash)",
+            ]
+            
+            for idx_sql in indexes:
+                try:
+                    cursor.execute(idx_sql)
+                except sqlite3.OperationalError as e:
+                    # 索引已存在或其他非致命错误，跳过
+                    if "already exists" not in str(e).lower():
+                        print(f"⚠️  Index warning: {e}")
+            
             conn.commit()
     
     def get_node_hash(self, link: str) -> str:
