@@ -157,12 +157,10 @@ jobs:
         rm -rf downloaded-shards/ shard-*/ 2>/dev/null || true
         git add output/*.txt output/*.json output/*.md 2>/dev/null || true
         
-    - name: 🔥 Pull before push (fix conflict)
+    - name: Pull latest changes before push
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        
-        # 🔥 关键：先拉取远程最新代码，避免冲突
         git pull --rebase --autostash origin main 2>/dev/null || true
         
     - name: Commit merged results
@@ -170,24 +168,13 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 检查是否有变更
         if ! git diff --cached --quiet; then
           echo "📝 Changes detected, committing..."
-          
-          # 🔥 再次尝试拉取（处理并发情况）
           git pull --rebase --autostash origin main 2>/dev/null || true
-          
           git commit -m "chore: merge 8-shard crawl results $(date '+%Y-%m-%d %H:%M')"
-          
-          # 🔥 推送时使用 --force-with-lease 安全强制推送
           git push origin main --force-with-lease
         else
           echo "✅ No changes to commit"
         fi
         
-    - name: Cleanup artifacts
-      uses: geekyeggo/delete-artifact@v2
-      with:
-        name: shard-*-results
-      if: always()
-      continue-on-error: true
+    # 🔥 已删除: Cleanup artifacts 步骤（不需要，会自动过期）
