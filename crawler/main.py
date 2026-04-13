@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Simplified Main Entry Point
+Main Entry Point - Fixed Import
 """
 
 import asyncio
@@ -13,7 +13,8 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from crawler.github_crawler import SimpleGitHubCrawler
+# ✅ 修复：导入正确的类名
+from crawler.github_crawler import SuperGitHubCrawler
 from crawler.validator import NodeValidator
 from crawler.deduplicator import NodeDeduplicator
 from crawler.utils import setup_logger, save_to_file
@@ -22,12 +23,14 @@ logger = setup_logger(__name__)
 
 async def main():
     print("=" * 60)
-    print("🚀 Starting Simplified Proxy Node Crawler")
+    print("🚀 Starting Proxy Node Crawler")
     print("=" * 60)
     
     # 初始化组件
     github_token = os.getenv("GITHUB_TOKEN", "")
-    crawler = SimpleGitHubCrawler(github_token)
+    
+    # ✅ 修复：使用正确的类名
+    crawler = SuperGitHubCrawler(github_token)
     validator = NodeValidator(concurrent_limit=100, timeout=8)
     deduplicator = NodeDeduplicator()
     
@@ -38,7 +41,7 @@ async def main():
         print(f"📊 Total crawled: {len(all_nodes)} nodes")
         
         if not all_nodes:
-            print("⚠️  No nodes found! Check your search queries.")
+            print("⚠️  No nodes found! Check search queries and GitHub API access.")
             return
         
         # 去重
@@ -47,8 +50,9 @@ async def main():
         
         # 验证节点
         print("🔍 Validating nodes...")
-        pending_nodes = deduplicator.get_recent_nodes(limit=200)
+        pending_nodes = deduplicator.get_recent_nodes(limit=300)
         
+        valid_nodes = []
         if pending_nodes:
             validation_results = await validator.validate_nodes_batch(pending_nodes)
             valid_results = []
@@ -65,8 +69,7 @@ async def main():
             valid_nodes = validator.filter_valid_nodes(validation_results, max_latency=500.0)
             print(f"✅ Valid nodes: {len(valid_nodes)}")
         else:
-            valid_nodes = []
-            print("⚠️  No nodes to validate")
+            print("⚠️  No pending nodes to validate")
         
         # 生成输出
         output_dir = Path("output")
@@ -84,9 +87,10 @@ async def main():
         for protocol, nodes in by_protocol.items():
             if nodes:
                 links = [n.get('link', '') for n in nodes if n.get('link')]
-                save_to_file(output_dir / f"{protocol}_sub.txt", "\n".join(links))
-                save_to_file(output_dir / f"{protocol}_nodes.json", 
-                           json.dumps(nodes, indent=2, ensure_ascii=False))
+                if links:
+                    save_to_file(output_dir / f"{protocol}_sub.txt", "\n".join(links))
+                    save_to_file(output_dir / f"{protocol}_nodes.json", 
+                               json.dumps(nodes, indent=2, ensure_ascii=False))
         
         # 合并文件
         all_links = []
@@ -117,6 +121,8 @@ By protocol:
         
     except Exception as e:
         print(f"❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
         raise
 
 if __name__ == "__main__":
