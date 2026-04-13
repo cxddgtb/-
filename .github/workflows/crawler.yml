@@ -37,7 +37,6 @@ jobs:
     - name: Run crawler
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      timeout-minutes: 45
       run: |
         python -m crawler.main
         
