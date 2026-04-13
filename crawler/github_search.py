@@ -84,22 +84,29 @@ class GitHubSearcher:
             
         return []
     
-    async def get_file_content(self, owner: str, repo: str, path: str) -> Optional[str]:
-        """Get file content from repository"""
-        url = f"{self.base_url}/repos/{owner}/{repo}/contents/{path}"
+# 在 get_file_content 方法中替换编码处理部分：
+
+async def get_file_content(self, owner: str, repo: str, path: str) -> Optional[str]:
+    """Get file content from repository"""
+    url = f"{self.base_url}/repos/{owner}/{repo}/contents/{path}"
+    
+    try:
+        async with aiohttp.ClientSession(headers=self.headers) as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    import base64
+                    # 解码 base64 内容
+                    raw_content = base64.b64decode(data["content"])
+                    # 自动检测编码
+                    from crawler.utils import detect_encoding
+                    encoding = detect_encoding(raw_content)
+                    content = raw_content.decode(encoding, errors='ignore')
+                    return content
+    except Exception as e:
+        logger.error(f"Error getting file content: {e}")
         
-        try:
-            async with aiohttp.ClientSession(headers=self.headers) as session:
-                async with session.get(url) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        import base64
-                        content = base64.b64decode(data["content"]).decode("utf-8", errors="ignore")
-                        return content
-        except Exception as e:
-            logger.error(f"Error getting file content: {e}")
-            
-        return None
+    return None
     
     async def search_code(self, query: str) -> List[Dict]:
         """Search GitHub code"""
