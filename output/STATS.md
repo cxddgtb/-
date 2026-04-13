@@ -1,7 +1,7 @@
 # Proxy Nodes Report
-Generated: 2026-04-13 00:58:17
-Total crawled: 21967
-Valid nodes: 93
+Generated: 2026-04-13 15:15:53
+Mode: 8-shard parallel merge
 
-By protocol:
-- vless: 93
+## Summary
+- Merged from 8 shards
+- Output files generated in output/
