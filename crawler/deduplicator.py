@@ -202,23 +202,43 @@ class NodeDeduplicator:
             cursor.execute(query, params)
             return [dict(row) for row in cursor.fetchall()]
     
-    def cleanup_old_nodes(self, max_age_days: int = 30):
-        """清理过期节点"""
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            
-            # 删除超过指定天数未验证且无效的节点
+    def auto_cleanup(self, max_total_nodes: int = 50000, max_age_days: int = 7):
+    """自动清理：保持数据库在合理大小"""
+    with sqlite3.connect(self.db_path) as conn:
+        cursor = conn.cursor()
+        
+        # 1. 删除超过最大天数的无效节点
+        cursor.execute("""
+            DELETE FROM nodes 
+            WHERE is_valid = 0 
+            AND last_validated < datetime('now', '-{} days')
+        """.format(min(max_age_days, 3)))
+        
+        # 2. 如果总数超限，删除最旧的无效节点
+        cursor.execute("SELECT COUNT(*) FROM nodes")
+        total = cursor.fetchone()[0]
+        
+        if total > max_total_nodes:
+            excess = total - max_total_nodes
             cursor.execute("""
                 DELETE FROM nodes 
-                WHERE last_validated < datetime('now', '-{} days')
-                AND is_valid = 0
-            """.format(max_age_days))
-            
-            deleted = cursor.rowcount
-            conn.commit()
-            
-            logger.info(f"Cleaned up {deleted} old invalid nodes")
-            return deleted
+                WHERE id IN (
+                    SELECT id FROM nodes 
+                    WHERE is_valid = 0 
+                    ORDER BY last_validated ASC 
+                    LIMIT ?
+                )
+            """, (excess,))
+            logger.info(f"Cleaned {cursor.rowcount} old nodes to stay under limit")
+        
+        # 3. 压缩数据库（释放空间）
+        cursor.execute("VACUUM")
+        conn.commit()
+        
+        # 返回当前大小
+        db_size = Path(self.db_path).stat().st_size / 1024 / 1024  # MB
+        logger.info(f"Database size after cleanup: {db_size:.2f} MB")
+        return db_size
     
     def get_stats(self) -> Dict:
         """获取数据库统计信息"""
