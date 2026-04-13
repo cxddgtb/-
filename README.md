@@ -29,17 +29,13 @@
 2. 选择 "Proxy Node Crawler" 工作流
 3. 点击 "Run workflow" 按钮
 
-### 本地运行
-```bash
-# 克隆仓库
-git clone https://github.com/yourusername/proxy-node-crawler.git
-cd proxy-node-crawler
+---
 
-# 安装依赖
-pip install -r requirements.txt
+https://github.com/cxddgtb/- 爬取
 
-# 设置环境变量（可选）
-export GITHUB_TOKEN=your_github_token
+https://github.com/cxddgtb/cxddzy 整合
 
-# 运行爬虫
-python -m crawler.main
+https://github.com/cxddgtb/dljdsjq 重命名加可添加日更节点
+
+https://github.com/cxddgtb/2026Clash 最终测试《包括延迟和下载》
+
