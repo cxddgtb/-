@@ -4,8 +4,8 @@ from .github_gist import GitHubGistSearcher
 from .github_readme import GitHubREADMESearcher
 
 __all__ = [
-    'GitHubRepoSearcher',
-    'GitHubCodeSearcher',
-    'GitHubGistSearcher',
-    'GitHubREADMESearcher',
+    "GitHubRepoSearcher",
+    "GitHubCodeSearcher",
+    "GitHubGistSearcher",
+    "GitHubREADMESearcher",
 ]
