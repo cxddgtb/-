@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+*.egg-info/
+*.egg
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# 🔥 不提交数据库文件（超过100MB限制）
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+!.gitkeep
+
+# 日志
+logs/*.log
+
+# 输出目录（保留但可本地忽略）
+# output/
