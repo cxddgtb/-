@@ -2,7 +2,7 @@ name: Proxy Node Crawler (Parallel 8x)
 
 on:
   schedule:
-    - cron: '0 */5 * * *'  # 每5小时
+    - cron: '0 */5 * * *'
   workflow_dispatch:
 
 permissions:
@@ -13,10 +13,10 @@ jobs:
   crawl-shards:
     strategy:
       matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]  # 8路并行
-      fail-fast: false  # 一个失败不影响其他
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+      fail-fast: false
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -43,14 +43,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # 🔥 传入 shard_id 参数
-        python -m crawler.main --shard ${{ matrix.shard }}
+        python -m crawler.main --shard ${{ matrix.shard }} --skip-validate
         
     - name: Save shard output
       run: |
-        # 保存本分片的结果到独立目录
         cp -r output/* shard-${{ matrix.shard }}/ 2>/dev/null || true
-        # 重命名数据库避免冲突
         mv database/nodes.db shard-${{ matrix.shard }}/nodes_shard_${{ matrix.shard }}.db 2>/dev/null || true
         
     - name: Upload shard artifacts
@@ -58,14 +55,14 @@ jobs:
       with:
         name: shard-${{ matrix.shard }}-results
         path: shard-${{ matrix.shard }}/
-        retention-days: 1  # 只需保留到合并步骤
+        retention-days: 1
 
 
-  # 🔥 阶段2: 合并所有分片结果（依赖所有爬虫完成）
+  # 🔥 阶段2: 合并所有分片结果
   merge-results:
     needs: crawl-shards
     runs-on: ubuntu-latest
-    if: always()  # 即使部分分片失败也尝试合并
+    if: always()
     
     steps:
     - name: Checkout
@@ -93,7 +90,7 @@ jobs:
         
     - name: Merge databases and outputs
       run: |
-        mkdir -p database output merged-logs
+        mkdir -p database output
         
         # 🔥 合并数据库
         python << 'MERGE_SCRIPT'
@@ -103,9 +100,10 @@ jobs:
         main_db = "database/nodes.db"
         shard_dbs = list(Path("downloaded-shards").glob("*/nodes_shard_*.db"))
         
+        Path("database").mkdir(exist_ok=True)
+        
         if not shard_dbs:
-            print("⚠️ No shard databases found, creating empty main DB")
-            Path(main_db).parent.mkdir(exist_ok=True)
+            print("⚠️ No shard databases found")
             conn = sqlite3.connect(main_db)
             conn.execute("CREATE TABLE IF NOT EXISTS nodes (id INTEGER PRIMARY KEY)")
             conn.commit()
@@ -115,60 +113,72 @@ jobs:
             from crawler.deduplicator import NodeDeduplicator
             dedup = NodeDeduplicator(main_db)
             dedup.merge_databases([str(p) for p in shard_dbs])
-            print(f"✅ Merge complete. DB size: {dedup.get_stats().get('db_size_mb', 0):.2f} MB")
+            stats = dedup.get_stats()
+            print(f"✅ Merge complete. Total: {stats.get('total', 0)}, Valid: {stats.get('valid', 0)}, Size: {stats.get('db_size_mb', 0):.2f} MB")
         MERGE_SCRIPT
         
-        # 🔥 合并输出文件（去重）
+        # 🔥 合并输出文件
         python << 'MERGE_OUTPUT'
         from pathlib import Path
-        import json
         
         output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
         
-        # 合并订阅文件
+        # 合并订阅文件（去重）
         for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls', 'all']:
             all_links = set()
             for sub_file in Path("downloaded-shards").glob(f"*/{proto}_sub.txt"):
                 try:
-                    links = sub_file.read_text().strip().split('\n')
-                    all_links.update(l.strip() for l in links if l.strip())
+                    content = sub_file.read_text(encoding='utf-8', errors='ignore')
+                    links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
+                    all_links.update(links)
                 except: pass
             if all_links:
                 (output_dir / f"{proto}_sub.txt").write_text('\n'.join(sorted(all_links)))
                 print(f"✅ Merged {proto}_sub.txt: {len(all_links)} links")
         
-        # 合并 JSON（简单拼接，实际可优化）
-        for json_file in Path("downloaded-shards").glob("*/all_nodes.json"):
-            try:
-                data = json.loads(json_file.read_text())
-                # 这里可以添加更智能的合并逻辑
-            except: pass
+        # 生成合并统计
+        from datetime import datetime
+        stats_content = f"""# Proxy Nodes Report
+Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+Mode: 8-shard parallel merge
+
+## Summary
+- Merged from 8 shards
+- Output files generated in output/
+"""
+        (output_dir / "STATS.md").write_text(stats_content)
+        print("✅ Generated STATS.md")
         MERGE_OUTPUT
         
-    - name: Final validation (optional)
+    - name: 🔥 Fix git state before commit (关键修复)
       run: |
-        # 可选：对合并后的节点做抽样验证
-        python -c "
-        from crawler.deduplicator import NodeDeduplicator
-        d = NodeDeduplicator()
-        stats = d.get_stats()
-        print(f'📊 Final Stats: {stats}')
-        " || true
+        # 确保数据库文件不被追踪
+        git update-index --assume-unchanged database/nodes.db 2>/dev/null || true
+        git reset database/nodes.db 2>/dev/null || true
+        
+        # 清理临时目录
+        rm -rf downloaded-shards/ shard-*/ 2>/dev/null || true
+        
+        # 只添加输出文件（明确指定，避免误加）
+        git add output/*.txt output/*.json output/*.md 2>/dev/null || true
         
     - name: Commit merged results
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        git add output/
-        
-        git diff --quiet && git diff --staged --quiet || (
-          git commit -m "chore: merge 8-shard crawl results $(date '+%Y-%m-%d %H:%M')" &&
+        # 检查是否有实际变更
+        if ! git diff --cached --quiet; then
+          echo "📝 Changes detected, committing..."
+          git commit -m "chore: merge 8-shard crawl results $(date '+%Y-%m-%d %H:%M')"
           git push
-        )
+        else
+          echo "✅ No changes to commit"
+        fi
         
     - name: Cleanup artifacts
       uses: geekyeggo/delete-artifact@v2
       with:
         name: shard-*-results
+      if: always()
