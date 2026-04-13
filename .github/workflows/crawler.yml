@@ -1,3 +1,5 @@
+# .github/workflows/crawler.yml
+
 name: Proxy Node Crawler
 
 on:
@@ -32,19 +34,34 @@ jobs:
     - name: Create directories
       run: |
         mkdir -p database logs output
+        touch database/.gitkeep  # 保持目录结构
         
     - name: Run crawler
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      timeout-minutes: 45
       run: |
         python -m crawler.main
         
-    - name: Commit results
+    - name: Commit ONLY output files (not database)
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add output/ database/
+        
+        # 🔥 只添加 output 目录，排除 database
+        git add output/
+        
+        # 如果有更改则提交
         git diff --quiet && git diff --staged --quiet || (
-          git commit -m "chore: update nodes $(date '+%Y-%m-%d %H:%M')" &&
+          git commit -m "chore: update proxy nodes $(date '+%Y-%m-%d %H:%M')" &&
           git push
         )
+        
+    - name: Upload artifacts (optional backup)
+      uses: actions/upload-artifact@v4
+      with:
+        name: proxy-nodes-backup
+        path: |
+          output/
+          database/nodes.db  # 作为 artifact 保存7天，不提交到仓库
+        retention-days: 7
