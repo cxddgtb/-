@@ -36,6 +36,7 @@ jobs:
     - name: Run crawler
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      timeout-minutes: 45  # 🔥 增加超时到45分钟（节点多时验证耗时）
       run: |
         python -m crawler.main
         
