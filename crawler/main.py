@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Main Entry Point - Proxy Node Crawler
-支持8路并行爬取 + 智能去重 + 自动清理
-🔧 代码小白专用：完整文件，直接复制替换即可
-"""
 
 import asyncio
 import json
