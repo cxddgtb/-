@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Proxy Node Crawler - Main Entry Point
-Crawls GitHub for proxy nodes every 5 hours
+Enhanced with validation and deduplication
 """
 
 import asyncio
@@ -16,6 +16,8 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from crawler.github_search import GitHubSearcher
 from crawler.parser import NodeParser
+from crawler.validator import NodeValidator
+from crawler.deduplicator import NodeDeduplicator
 from crawler.utils import setup_logger, save_to_file
 from config.settings import Config
 
@@ -25,197 +27,192 @@ class ProxyNodeCrawler:
     def __init__(self):
         self.searcher = GitHubSearcher()
         self.parser = NodeParser()
+        self.validator = NodeValidator(concurrent_limit=30, timeout=5)
+        self.deduplicator = NodeDeduplicator()
         self.config = Config()
-        self.all_nodes = {
-            'vless': [],
-            'naiveproxy': [],
-            'anytls': [],
-            'shadowtls': [],
-            'hysteria2': [],
-            'tuic': [],
-            'all': []
-        }
         
-    async def search_protocol(self, protocol: str, keywords: list) -> list:
-        """Search for specific protocol nodes"""
-        logger.info(f"Searching for {protocol} nodes...")
-        nodes = []
+    async def crawl_and_validate(self, protocol: str, keywords: list) -> list:
+        """爬取并验证指定协议的节点"""
+        logger.info(f"Starting crawl for {protocol}...")
         
+        # 1. 爬取新节点
+        new_nodes = []
         for keyword in keywords:
             try:
-                results = await self.searcher.search_repos(keyword)
+                # 优先搜索最近更新的仓库
+                results = await self.searcher.search_repos(
+                    keyword, 
+                    sort="updated", 
+                    order="desc"
+                )
+                
                 for repo in results:
+                    # 只处理最近7天更新的仓库
+                    updated_at = datetime.fromisoformat(
+                        repo['updated_at'].replace('Z', '+00:00')
+                    )
+                    if (datetime.now(updated_at.tzinfo) - updated_at).days > 7:
+                        continue
+                        
                     node_info = await self.parser.parse_repository(repo, protocol)
                     if node_info:
-                        nodes.extend(node_info)
-                logger.info(f"Found {len(nodes)} {protocol} nodes so far")
+                        new_nodes.extend(node_info)
+                        
             except Exception as e:
                 logger.error(f"Error searching {keyword}: {e}")
-                
-        return nodes
+        
+        logger.info(f"Crawled {len(new_nodes)} new {protocol} nodes")
+        
+        # 2. 去重并存储
+        if new_nodes:
+            stats = self.deduplicator.add_or_update_nodes(new_nodes)
+            logger.info(f"Deduplication: {stats}")
+        
+        # 3. 获取待验证节点（新节点 + 需要重新验证的旧节点）
+        pending_nodes = self.deduplicator.get_recent_nodes(protocol, limit=200)
+        
+        # 4. 批量验证
+        if pending_nodes:
+            logger.info(f"Validating {len(pending_nodes)} {protocol} nodes...")
+            validation_results = await self.validator.validate_nodes_batch(pending_nodes)
+            
+            # 更新验证结果
+            valid_results = []
+            for result in validation_results:
+                if isinstance(result, Exception):
+                    continue
+                valid_results.append({
+                    'link': result.node_link,
+                    'protocol': result.protocol,
+                    'is_valid': result.is_valid,
+                    'latency_ms': result.latency_ms,
+                    'response_time': result.response_time
+                })
+            
+            self.deduplicator.update_validation_results(valid_results)
+            
+            # 过滤有效节点
+            valid_nodes = self.validator.filter_valid_nodes(
+                validation_results,
+                max_latency=300.0
+            )
+            
+            logger.info(f"Found {len(valid_nodes)} valid {protocol} nodes")
+            return valid_nodes
+        
+        return []
     
-    async def crawl_vless(self):
-        """Crawl VLESS nodes (Reality/Xhttp/Vision/ENC)"""
-        keywords = [
-            "vless reality",
-            "vless vision",
-            "vless xhttp reality",
-            "vless enc",
-            "xray vless reality",
-            "sing-box vless"
-        ]
-        nodes = await self.search_protocol("vless", keywords)
-        self.all_nodes['vless'].extend(nodes)
-        self.all_nodes['all'].extend(nodes)
+    async def crawl_all_protocols(self):
+        """爬取所有协议"""
+        protocols_config = {
+            'vless': ["vless reality", "vless vision", "xray vless reality"],
+            'naiveproxy': ["naiveproxy config", "naive proxy"],
+            'anytls': ["anytls config"],
+            'shadowtls': ["shadowtls", "shadow-tls config"],
+            'hysteria2': ["hysteria2", "hy2 config"],
+            'tuic': ["tuic config", "tuic v5"]
+        }
         
-    async def crawl_naiveproxy(self):
-        """Crawl NaiveProxy nodes"""
-        keywords = [
-            "naiveproxy",
-            "naive proxy config",
-            "naiveproxy config"
-        ]
-        nodes = await self.search_protocol("naiveproxy", keywords)
-        self.all_nodes['naiveproxy'].extend(nodes)
-        self.all_nodes['all'].extend(nodes)
+        all_valid_nodes = {}
         
-    async def crawl_anytls(self):
-        """Crawl AnyTLS nodes"""
-        keywords = [
-            "anytls",
-            "anytls config"
+        # 并发爬取所有协议
+        tasks = [
+            self.crawl_and_validate(protocol, keywords)
+            for protocol, keywords in protocols_config.items()
         ]
-        nodes = await self.search_protocol("anytls", keywords)
-        self.all_nodes['anytls'].extend(nodes)
-        self.all_nodes['all'].extend(nodes)
         
-    async def crawl_shadowtls(self):
-        """Crawl ShadowTLS nodes"""
-        keywords = [
-            "shadowtls",
-            "shadow-tls",
-            "shadowtls config"
-        ]
-        nodes = await self.search_protocol("shadowtls", keywords)
-        self.all_nodes['shadowtls'].extend(nodes)
-        self.all_nodes['all'].extend(nodes)
+        results = await asyncio.gather(*tasks, return_exceptions=True)
         
-    async def crawl_hysteria2(self):
-        """Crawl Hysteria2 nodes"""
-        keywords = [
-            "hysteria2",
-            "hysteria 2",
-            "hy2 config",
-            "hysteria2 config"
-        ]
-        nodes = await self.search_protocol("hysteria2", keywords)
-        self.all_nodes['hysteria2'].extend(nodes)
-        self.all_nodes['all'].extend(nodes)
+        for protocol, result in zip(protocols_config.keys(), results):
+            if isinstance(result, Exception):
+                logger.error(f"Failed to crawl {protocol}: {result}")
+                all_valid_nodes[protocol] = []
+            else:
+                all_valid_nodes[protocol] = result
         
-    async def crawl_tuic(self):
-        """Crawl TUIC nodes"""
-        keywords = [
-            "tuic",
-            "tuic config",
-            "tuic proxy"
-        ]
-        nodes = await self.search_protocol("tuic", keywords)
-        self.all_nodes['tuic'].extend(nodes)
-        self.all_nodes['all'].extend(nodes)
-        
-    def generate_subscriptions(self):
-        """Generate subscription links for each protocol"""
+        return all_valid_nodes
+    
+    def generate_output(self, valid_nodes: dict):
+        """生成输出文件"""
         output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Generate individual protocol files
-        for protocol, nodes in self.all_nodes.items():
-            if protocol == 'all':
+        # 生成各协议订阅
+        for protocol, nodes in valid_nodes.items():
+            if not nodes:
                 continue
                 
-            if nodes:
-                # Generate subscription link format
-                sub_links = []
-                for node in nodes:
-                    if 'link' in node:
-                        sub_links.append(node['link'])
-                        
-                if sub_links:
-                    # Save as base64 encoded subscription
-                    sub_content = "\n".join(sub_links)
-                    save_to_file(
-                        output_dir / f"{protocol}_sub_{timestamp}.txt",
-                        sub_content
-                    )
-                    
-                    # Save as JSON
-                    save_to_file(
-                        output_dir / f"{protocol}_nodes_{timestamp}.json",
-                        json.dumps(nodes, indent=2, ensure_ascii=False)
-                    )
+            # 订阅链接文件
+            links = [node['link'] for node in nodes]
+            save_to_file(
+                output_dir / f"{protocol}_sub.txt",
+                "\n".join(links)
+            )
+            
+            # JSON详细文件
+            save_to_file(
+                output_dir / f"{protocol}_nodes.json",
+                json.dumps(nodes, indent=2, ensure_ascii=False)
+            )
         
-        # Generate all-in-one subscription
+        # 合并订阅
         all_links = []
-        for node in self.all_nodes['all']:
-            if 'link' in node:
-                all_links.append(node['link'])
-                
+        for nodes in valid_nodes.values():
+            all_links.extend([node['link'] for node in nodes])
+            
         if all_links:
             save_to_file(
-                output_dir / f"all_sub_{timestamp}.txt",
+                output_dir / "all_sub.txt",
                 "\n".join(all_links)
             )
             
             save_to_file(
-                output_dir / f"all_nodes_{timestamp}.json",
-                json.dumps(self.all_nodes, indent=2, ensure_ascii=False)
+                output_dir / "all_nodes.json",
+                json.dumps(valid_nodes, indent=2, ensure_ascii=False)
             )
-            
-        # Generate README for output
-        readme_content = f"""# Proxy Nodes Collection
-**Last Updated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-**Total Nodes:** {len(self.all_nodes['all'])}
-
-## Protocol Statistics:
-- VLESS: {len(self.all_nodes['vless'])}
-- NaiveProxy: {len(self.all_nodes['naiveproxy'])}
-- AnyTLS: {len(self.all_nodes['anytls'])}
-- ShadowTLS: {len(self.all_nodes['shadowtls'])}
-- Hysteria2: {len(self.all_nodes['hysteria2'])}
-- TUIC: {len(self.all_nodes['tuic'])}
-
-## Subscription Links:
-"""
-        for protocol in ['vless', 'naiveproxy', 'anytls', 'shadowtls', 'hysteria2', 'tuic']:
-            if self.all_nodes[protocol]:
-                readme_content += f"- {protocol.upper()}: `{protocol}_sub_{timestamp}.txt`\n"
-                
-        save_to_file(output_dir / "README.md", readme_content)
         
+        # 生成统计报告
+        stats = self.deduplicator.get_stats()
+        report = f"""# Proxy Nodes Report
+**Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+
+## Database Statistics
+- Total nodes: {stats['total']}
+- Valid nodes: {stats['valid']}
+- Last validation: {stats.get('last_validation', 'N/A')}
+
+## Protocol Breakdown
+"""
+        for proto, data in stats.get('by_protocol', {}).items():
+            report += f"- {proto}: {data['valid']}/{data['total']} valid\n"
+            
+        save_to_file(output_dir / "STATS.md", report)
+        
+        logger.info(f"Output generated in {output_dir}")
+    
     async def run(self):
-        """Main crawler execution"""
-        logger.info("Starting proxy node crawler...")
+        """主执行流程"""
+        logger.info("=== Starting Proxy Node Crawler ===")
         start_time = datetime.now()
         
         try:
-            # Crawl all protocols
-            await asyncio.gather(
-                self.crawl_vless(),
-                self.crawl_naiveproxy(),
-                self.crawl_anytls(),
-                self.crawl_shadowtls(),
-                self.crawl_hysteria2(),
-                self.crawl_tuic()
-            )
+            # 1. 清理过期节点
+            cleaned = self.deduplicator.cleanup_old_nodes(max_age_days=14)
+            logger.info(f"Cleaned {cleaned} old nodes")
             
-            # Generate output files
-            self.generate_subscriptions()
+            # 2. 爬取并验证所有协议
+            valid_nodes = await self.crawl_all_protocols()
             
-            elapsed = (datetime.now() - start_time).total_seconds()
-            logger.info(f"Crawler completed in {elapsed:.2f} seconds")
-            logger.info(f"Total nodes found: {len(self.all_nodes['all'])}")
+            # 3. 生成输出
+            self.generate_output(valid_nodes)
+            
+            # 4. 打印统计
+            stats = self.deduplicator.get_stats()
+            logger.info(f"=== Crawler Completed ===")
+            logger.info(f"Duration: {(datetime.now() - start_time).total_seconds():.2f}s")
+            logger.info(f"Total valid nodes: {stats['valid']}")
             
         except Exception as e:
             logger.error(f"Crawler failed: {e}")
