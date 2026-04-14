@@ -1,0 +1,2 @@
+tuic://&lt;uuid&gt;:&lt;uuid&gt;@&lt;IP&gt;:&lt;PORT&gt;?congestion_control=bbr&amp;alpn=h3&amp;insecure=1&amp;allowInsecure=1&amp;sni=&lt;REALITY_SERVER&gt;#tuic-v5
+tuic://UUID:PASSWORD@SERVER_IP:PORT/?congestion_control=bbr&alpn=h3,spdy/3.1&udp_relay_mode=native&allow_insecure=1
