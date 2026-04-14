@@ -1,4 +1,4 @@
-name: Proxy Node Crawler (Parallel 8x - DEBUG)
+name: Proxy Node Crawler (Parallel 8x - FIXED MERGE)
 
 on:
   schedule:
@@ -38,30 +38,11 @@ jobs:
         mkdir -p database logs output shard-${{ matrix.shard }}
         touch database/.gitkeep
         
-    - name: 🔍 Show environment info
-      run: |
-        echo "GITHUB_TOKEN set: $([ -n "$GITHUB_TOKEN" ] && echo 'YES' || echo 'NO')"
-        echo "Python version: $(python --version)"
-        echo "Working directory: $(pwd)"
-        echo "Repository: $GITHUB_REPOSITORY"
-        
     - name: Run crawler (shard ${{ matrix.shard }})
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "🔧 Running crawler with --debug flag..."
-        python -m crawler.main --shard ${{ matrix.shard }} --skip-validate --debug
-        
-    - name: 🔍 Show output files
-      run: |
-        echo "📁 Contents of output/:"
-        ls -la output/ 2>/dev/null || echo "output/ directory empty or not found"
-        echo ""
-        echo "📄 all_sub.txt preview (first 10 lines):"
-        head -10 output/all_sub.txt 2>/dev/null || echo "all_sub.txt not found or empty"
-        echo ""
-        echo "📊 Line count:"
-        wc -l output/*.txt 2>/dev/null || true
+        python -m crawler.main --shard ${{ matrix.shard }} --skip-validate
         
     - name: Save shard output
       run: |
@@ -103,20 +84,13 @@ jobs:
       with:
         pattern: shard-*-results
         path: downloaded-shards
-        merge-multiple: true
-        
-    - name: 🔍 Show downloaded artifacts
+        # 🔥 关键修复：移除 merge-multiple，防止同名文件互相覆盖
+        # merge-multiple: true  <-- 已删除
+    
+    - name: 🔍 Debug: Check downloaded structure
       run: |
-        echo "📁 Downloaded shards:"
+        echo "Downloaded structure:"
         find downloaded-shards -type f -name "*.txt" | head -20
-        echo ""
-        echo "📊 all_sub.txt from each shard:"
-        for f in downloaded-shards/*/all_sub.txt; do
-          if [ -f "$f" ]; then
-            lines=$(wc -l < "$f" 2>/dev/null || echo 0)
-            echo "  $f: $lines lines"
-          fi
-        done
         
     - name: Merge databases
       run: |
@@ -136,61 +110,74 @@ jobs:
             print(f'✅ DB: total={stats.get(\"total\", 0)}, valid={stats.get(\"valid\", 0)}')
         "
         
-    - name: Merge output files (with debug)
+    - name: Merge output files (ROBUST VERSION)
       run: |
         python3 << 'PYTHON_SCRIPT'
         from pathlib import Path
         from datetime import datetime
         import json
-        
+
         output_dir = Path('output')
         output_dir.mkdir(exist_ok=True)
         
-        print("🔍 Starting merge...")
+        print("🔍 Starting robust merge...")
+        
+        # 1. 找到所有分片目录
+        shard_dirs = list(Path('downloaded-shards').glob('shard-*-results'))
+        print(f"   Found {len(shard_dirs)} shard directories.")
+        
         protocol_stats = {}
         total_links = 0
         
-        for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls', 'all']:
+        # 协议列表
+        protocols = ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls']
+        
+        for proto in protocols:
             all_links = set()
-            shard_files = list(Path('downloaded-shards').glob(f'*/{proto}_sub.txt'))
-            print(f"  {proto}: found {len(shard_files)} shard files")
             
-            for sub_file in shard_files:
-                try:
-                    content = sub_file.read_text(encoding='utf-8', errors='ignore')
-                    links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
-                    print(f"    - {sub_file.parent.name}: {len(links)} links")
-                    all_links.update(links)
-                except Exception as e:
-                    print(f"    ⚠️  Error reading {sub_file}: {e}")
+            # 遍历每个分片目录
+            for shard_dir in shard_dirs:
+                proto_file = shard_dir / f"{proto}_sub.txt"
+                if proto_file.exists():
+                    try:
+                        content = proto_file.read_text(encoding='utf-8', errors='ignore')
+                        links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
+                        if links:
+                            print(f"   📄 {shard_dir.name}/{proto}_sub.txt: {len(links)} links")
+                            all_links.update(links)
+                    except Exception as e:
+                        print(f"   ⚠️  Error reading {proto_file}: {e}")
             
+            # 写入合并后的文件
             if all_links:
                 (output_dir / f'{proto}_sub.txt').write_text('\n'.join(sorted(all_links)))
                 protocol_stats[proto.upper()] = len(all_links)
                 total_links += len(all_links)
-                print(f"  ✅ {proto}_sub.txt: {len(all_links)} links")
+                print(f"   ✅ Merged {proto}_sub.txt: {len(all_links)} total links")
             else:
-                print(f"  ⚠️  {proto}_sub.txt: NO LINKS FOUND")
-                # 创建空文件避免缺失
-                (output_dir / f'{proto}_sub.txt').write_text('')
+                print(f"   ⚠️  No links found for {proto}")
+                (output_dir / f'{proto}_sub.txt').write_text('') # 创建空文件占位
+
+        # 2. 生成 all_sub.txt (所有协议合并)
+        print("\n🔗 Generating all_sub.txt...")
+        all_links_global = set()
         
-        # 生成 all_sub.txt
-        all_links = set()
-        for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls']:
-            proto_file = output_dir / f'{proto}_sub.txt'
-            if proto_file.exists():
+        for proto_file in output_dir.glob('*_sub.txt'):
+            if proto_file.name == 'all_sub.txt': continue
+            try:
                 content = proto_file.read_text(encoding='utf-8', errors='ignore')
                 links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
-                all_links.update(links)
-        
-        if all_links:
-            (output_dir / 'all_sub.txt').write_text('\n'.join(sorted(all_links)))
-            print(f"✅ all_sub.txt: {len(all_links)} total links")
+                all_links_global.update(links)
+            except: pass
+            
+        if all_links_global:
+            (output_dir / 'all_sub.txt').write_text('\n'.join(sorted(all_links_global)))
+            print(f"   ✅ all_sub.txt: {len(all_links_global)} total links")
         else:
-            print(f"⚠️  all_sub.txt: NO LINKS - creating empty file")
+            print(f"   ⚠️  all_sub.txt is empty")
             (output_dir / 'all_sub.txt').write_text('')
-        
-        # 生成报告
+
+        # 3. 生成统计报告
         stats_lines = [
             '# Proxy Nodes Report',
             f'**Last Updated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
@@ -201,25 +188,10 @@ jobs:
         ]
         for proto, count in sorted(protocol_stats.items()):
             stats_lines.append(f'- {proto}: {count}')
-        
+            
         (output_dir / 'STATS.md').write_text('\n'.join(stats_lines))
-        print(f"✅ Generated STATS.md")
+        print("\n✅ Merge completed successfully.")
         PYTHON_SCRIPT
-        
-    - name: 🔍 Show final output
-      run: |
-        echo "📁 Final output/ contents:"
-        ls -lh output/
-        echo ""
-        echo "📄 all_sub.txt stats:"
-        if [ -f output/all_sub.txt ]; then
-          echo "  Lines: $(wc -l < output/all_sub.txt)"
-          echo "  Size: $(du -h output/all_sub.txt | cut -f1)"
-          echo "  First 5 lines:"
-          head -5 output/all_sub.txt
-        else
-          echo "  ⚠️  all_sub.txt NOT FOUND!"
-        fi
         
     - name: Fix git state
       run: |
@@ -242,7 +214,7 @@ jobs:
         if ! git diff --cached --quiet; then
           echo "📝 Committing changes..."
           git pull --rebase --autostash origin main 2>/dev/null || true
-          git commit -m "chore: merge results $(date '+%Y-%m-%d %H:%M')"
+          git commit -m "chore: merge 8-shard results (fixed overwrite bug) $(date '+%Y-%m-%d %H:%M')"
           git push origin main --force-with-lease
         else
           echo "✅ No changes to commit"
