@@ -1,4 +1,4 @@
-name: Proxy Node Crawler (Parallel 8x)
+name: Proxy Node Crawler (Parallel 8x - DEBUG)
 
 on:
   schedule:
@@ -38,11 +38,30 @@ jobs:
         mkdir -p database logs output shard-${{ matrix.shard }}
         touch database/.gitkeep
         
+    - name: 🔍 Show environment info
+      run: |
+        echo "GITHUB_TOKEN set: $([ -n "$GITHUB_TOKEN" ] && echo 'YES' || echo 'NO')"
+        echo "Python version: $(python --version)"
+        echo "Working directory: $(pwd)"
+        echo "Repository: $GITHUB_REPOSITORY"
+        
     - name: Run crawler (shard ${{ matrix.shard }})
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python -m crawler.main --shard ${{ matrix.shard }} --skip-validate
+        echo "🔧 Running crawler with --debug flag..."
+        python -m crawler.main --shard ${{ matrix.shard }} --skip-validate --debug
+        
+    - name: 🔍 Show output files
+      run: |
+        echo "📁 Contents of output/:"
+        ls -la output/ 2>/dev/null || echo "output/ directory empty or not found"
+        echo ""
+        echo "📄 all_sub.txt preview (first 10 lines):"
+        head -10 output/all_sub.txt 2>/dev/null || echo "all_sub.txt not found or empty"
+        echo ""
+        echo "📊 Line count:"
+        wc -l output/*.txt 2>/dev/null || true
         
     - name: Save shard output
       run: |
@@ -86,78 +105,130 @@ jobs:
         path: downloaded-shards
         merge-multiple: true
         
-    - name: Merge databases and outputs
+    - name: 🔍 Show downloaded artifacts
+      run: |
+        echo "📁 Downloaded shards:"
+        find downloaded-shards -type f -name "*.txt" | head -20
+        echo ""
+        echo "📊 all_sub.txt from each shard:"
+        for f in downloaded-shards/*/all_sub.txt; do
+          if [ -f "$f" ]; then
+            lines=$(wc -l < "$f" 2>/dev/null || echo 0)
+            echo "  $f: $lines lines"
+          fi
+        done
+        
+    - name: Merge databases
       run: |
         mkdir -p database output
-        
         python3 -c "
         import sqlite3
         from pathlib import Path
-        
         main_db = 'database/nodes.db'
         shard_dbs = list(Path('downloaded-shards').glob('*/nodes_shard_*.db'))
-        
         Path('database').mkdir(exist_ok=True)
-        
-        if not shard_dbs:
-            print('⚠️ No shard databases found')
-            conn = sqlite3.connect(main_db)
-            conn.execute('CREATE TABLE IF NOT EXISTS nodes (id INTEGER PRIMARY KEY)')
-            conn.commit()
-            conn.close()
-        else:
-            print(f'🔗 Merging {len(shard_dbs)} shard databases...')
+        if shard_dbs:
+            print(f'🔗 Merging {len(shard_dbs)} databases...')
             from crawler.deduplicator import NodeDeduplicator
             dedup = NodeDeduplicator(main_db)
             dedup.merge_databases([str(p) for p in shard_dbs])
             stats = dedup.get_stats()
-            print(f'✅ Merge complete. Total: {stats.get(\"total\", 0)}, Valid: {stats.get(\"valid\", 0)}, Size: {stats.get(\"db_size_mb\", 0):.2f} MB')
+            print(f'✅ DB: total={stats.get(\"total\", 0)}, valid={stats.get(\"valid\", 0)}')
         "
         
-    - name: Merge output files
+    - name: Merge output files (with debug)
       run: |
-        python3 -c "
+        python3 << 'PYTHON_SCRIPT'
         from pathlib import Path
         from datetime import datetime
+        import json
         
         output_dir = Path('output')
         output_dir.mkdir(exist_ok=True)
         
+        print("🔍 Starting merge...")
+        protocol_stats = {}
+        total_links = 0
+        
         for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls', 'all']:
             all_links = set()
-            for sub_file in Path('downloaded-shards').glob(f'*/{proto}_sub.txt'):
+            shard_files = list(Path('downloaded-shards').glob(f'*/{proto}_sub.txt'))
+            print(f"  {proto}: found {len(shard_files)} shard files")
+            
+            for sub_file in shard_files:
                 try:
                     content = sub_file.read_text(encoding='utf-8', errors='ignore')
                     links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
+                    print(f"    - {sub_file.parent.name}: {len(links)} links")
                     all_links.update(links)
-                except:
-                    pass
+                except Exception as e:
+                    print(f"    ⚠️  Error reading {sub_file}: {e}")
+            
             if all_links:
                 (output_dir / f'{proto}_sub.txt').write_text('\n'.join(sorted(all_links)))
-                print(f'✅ Merged {proto}_sub.txt: {len(all_links)} links')
+                protocol_stats[proto.upper()] = len(all_links)
+                total_links += len(all_links)
+                print(f"  ✅ {proto}_sub.txt: {len(all_links)} links")
+            else:
+                print(f"  ⚠️  {proto}_sub.txt: NO LINKS FOUND")
+                # 创建空文件避免缺失
+                (output_dir / f'{proto}_sub.txt').write_text('')
         
+        # 生成 all_sub.txt
+        all_links = set()
+        for proto in ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls']:
+            proto_file = output_dir / f'{proto}_sub.txt'
+            if proto_file.exists():
+                content = proto_file.read_text(encoding='utf-8', errors='ignore')
+                links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
+                all_links.update(links)
+        
+        if all_links:
+            (output_dir / 'all_sub.txt').write_text('\n'.join(sorted(all_links)))
+            print(f"✅ all_sub.txt: {len(all_links)} total links")
+        else:
+            print(f"⚠️  all_sub.txt: NO LINKS - creating empty file")
+            (output_dir / 'all_sub.txt').write_text('')
+        
+        # 生成报告
         stats_lines = [
             '# Proxy Nodes Report',
-            f'Generated: {datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")}',
-            'Mode: 8-shard parallel merge',
+            f'**Last Updated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
+            f'**Total Nodes:** {total_links}',
             '',
-            '## Summary',
-            '- Merged from 8 shards',
-            '- Output files generated in output/',
+            '## Protocol Statistics:',
             ''
         ]
-        (output_dir / 'STATS.md').write_text('\n'.join(stats_lines))
-        print('✅ Generated STATS.md')
-        "
+        for proto, count in sorted(protocol_stats.items()):
+            stats_lines.append(f'- {proto}: {count}')
         
-    - name: Fix git state before commit
+        (output_dir / 'STATS.md').write_text('\n'.join(stats_lines))
+        print(f"✅ Generated STATS.md")
+        PYTHON_SCRIPT
+        
+    - name: 🔍 Show final output
+      run: |
+        echo "📁 Final output/ contents:"
+        ls -lh output/
+        echo ""
+        echo "📄 all_sub.txt stats:"
+        if [ -f output/all_sub.txt ]; then
+          echo "  Lines: $(wc -l < output/all_sub.txt)"
+          echo "  Size: $(du -h output/all_sub.txt | cut -f1)"
+          echo "  First 5 lines:"
+          head -5 output/all_sub.txt
+        else
+          echo "  ⚠️  all_sub.txt NOT FOUND!"
+        fi
+        
+    - name: Fix git state
       run: |
         git update-index --assume-unchanged database/nodes.db 2>/dev/null || true
         git reset database/nodes.db 2>/dev/null || true
         rm -rf downloaded-shards/ shard-*/ 2>/dev/null || true
         git add output/*.txt output/*.json output/*.md 2>/dev/null || true
         
-    - name: Pull latest changes before push
+    - name: Pull before push
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -169,12 +240,10 @@ jobs:
         git config --local user.name "GitHub Action"
         
         if ! git diff --cached --quiet; then
-          echo "📝 Changes detected, committing..."
+          echo "📝 Committing changes..."
           git pull --rebase --autostash origin main 2>/dev/null || true
-          git commit -m "chore: merge 8-shard crawl results $(date '+%Y-%m-%d %H:%M')"
+          git commit -m "chore: merge results $(date '+%Y-%m-%d %H:%M')"
           git push origin main --force-with-lease
         else
           echo "✅ No changes to commit"
         fi
-        
-    # 🔥 已删除: Cleanup artifacts 步骤（不需要，会自动过期）
