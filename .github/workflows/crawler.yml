@@ -56,7 +56,6 @@ jobs:
         path: shard-${{ matrix.shard }}/
         retention-days: 1
 
-
   merge-results:
     needs: crawl-shards
     runs-on: ubuntu-latest
@@ -84,120 +83,103 @@ jobs:
       with:
         pattern: shard-*-results
         path: downloaded-shards
-        # 🔥 关键修复：移除 merge-multiple，防止同名文件互相覆盖
-        # merge-multiple: true  <-- 已删除
+        # 关键修复：不要 merge-multiple，防止文件覆盖
     
-    - name: 🔍 Debug: Check downloaded structure
+    - name: Debug Check downloaded structure
       run: |
-        echo "Downloaded structure:"
+        echo "Checking downloaded files..."
         find downloaded-shards -type f -name "*.txt" | head -20
         
     - name: Merge databases
       run: |
         mkdir -p database output
-        python3 -c "
+        python3 << 'PYCODE'
         import sqlite3
         from pathlib import Path
+        
         main_db = 'database/nodes.db'
         shard_dbs = list(Path('downloaded-shards').glob('*/nodes_shard_*.db'))
         Path('database').mkdir(exist_ok=True)
+        
         if shard_dbs:
-            print(f'🔗 Merging {len(shard_dbs)} databases...')
+            print(f'Merging {len(shard_dbs)} databases...')
             from crawler.deduplicator import NodeDeduplicator
             dedup = NodeDeduplicator(main_db)
             dedup.merge_databases([str(p) for p in shard_dbs])
             stats = dedup.get_stats()
-            print(f'✅ DB: total={stats.get(\"total\", 0)}, valid={stats.get(\"valid\", 0)}')
-        "
+            print(f'DB merged: total={stats.get("total", 0)}')
+        else:
+            print('No shard databases found.')
+        PYCODE
         
-    - name: Merge output files (ROBUST VERSION)
+    - name: Merge output files
       run: |
-        python3 << 'PYTHON_SCRIPT'
+        python3 << 'PYCODE'
         from pathlib import Path
         from datetime import datetime
-        import json
 
         output_dir = Path('output')
         output_dir.mkdir(exist_ok=True)
         
-        print("🔍 Starting robust merge...")
-        
-        # 1. 找到所有分片目录
+        print("Starting merge...")
         shard_dirs = list(Path('downloaded-shards').glob('shard-*-results'))
-        print(f"   Found {len(shard_dirs)} shard directories.")
+        print(f"Found {len(shard_dirs)} shard directories.")
         
-        protocol_stats = {}
-        total_links = 0
-        
-        # 协议列表
         protocols = ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls']
+        total_links = 0
         
         for proto in protocols:
             all_links = set()
-            
-            # 遍历每个分片目录
             for shard_dir in shard_dirs:
                 proto_file = shard_dir / f"{proto}_sub.txt"
                 if proto_file.exists():
                     try:
                         content = proto_file.read_text(encoding='utf-8', errors='ignore')
                         links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
-                        if links:
-                            print(f"   📄 {shard_dir.name}/{proto}_sub.txt: {len(links)} links")
-                            all_links.update(links)
-                    except Exception as e:
-                        print(f"   ⚠️  Error reading {proto_file}: {e}")
+                        all_links.update(links)
+                    except: pass
             
-            # 写入合并后的文件
             if all_links:
                 (output_dir / f'{proto}_sub.txt').write_text('\n'.join(sorted(all_links)))
-                protocol_stats[proto.upper()] = len(all_links)
-                total_links += len(all_links)
-                print(f"   ✅ Merged {proto}_sub.txt: {len(all_links)} total links")
+                count = len(all_links)
+                total_links += count
+                print(f"Merged {proto}: {count} links")
             else:
-                print(f"   ⚠️  No links found for {proto}")
-                (output_dir / f'{proto}_sub.txt').write_text('') # 创建空文件占位
+                (output_dir / f'{proto}_sub.txt').write_text('')
+                print(f"Merged {proto}: 0 links")
 
-        # 2. 生成 all_sub.txt (所有协议合并)
-        print("\n🔗 Generating all_sub.txt...")
-        all_links_global = set()
-        
-        for proto_file in output_dir.glob('*_sub.txt'):
-            if proto_file.name == 'all_sub.txt': continue
+        # Generate all_sub.txt
+        all_global = set()
+        for f in output_dir.glob('*_sub.txt'):
+            if f.name == 'all_sub.txt': continue
             try:
-                content = proto_file.read_text(encoding='utf-8', errors='ignore')
-                links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
-                all_links_global.update(links)
+                c = f.read_text(errors='ignore')
+                all_global.update([l.strip() for l in c.split('\n') if l.strip() and '://' in l])
             except: pass
-            
-        if all_links_global:
-            (output_dir / 'all_sub.txt').write_text('\n'.join(sorted(all_links_global)))
-            print(f"   ✅ all_sub.txt: {len(all_links_global)} total links")
+        
+        if all_global:
+            (output_dir / 'all_sub.txt').write_text('\n'.join(sorted(all_global)))
+            print(f"Generated all_sub.txt: {len(all_global)} links")
         else:
-            print(f"   ⚠️  all_sub.txt is empty")
             (output_dir / 'all_sub.txt').write_text('')
-
-        # 3. 生成统计报告
-        stats_lines = [
+            print("Generated all_sub.txt: 0 links")
+            
+        # Generate Report
+        report = [
             '# Proxy Nodes Report',
-            f'**Last Updated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
-            f'**Total Nodes:** {total_links}',
-            '',
-            '## Protocol Statistics:',
+            f'Last Updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
+            f'Total Nodes: {total_links}',
             ''
         ]
-        for proto, count in sorted(protocol_stats.items()):
-            stats_lines.append(f'- {proto}: {count}')
-            
-        (output_dir / 'STATS.md').write_text('\n'.join(stats_lines))
-        print("\n✅ Merge completed successfully.")
-        PYTHON_SCRIPT
+        (output_dir / 'STATS.md').write_text('\n'.join(report))
+        print("Merge completed.")
+        PYCODE
         
     - name: Fix git state
       run: |
         git update-index --assume-unchanged database/nodes.db 2>/dev/null || true
         git reset database/nodes.db 2>/dev/null || true
-        rm -rf downloaded-shards/ shard-*/ 2>/dev/null || true
+        rm -rf downloaded-shards/ 2>/dev/null || true
         git add output/*.txt output/*.json output/*.md 2>/dev/null || true
         
     - name: Pull before push
@@ -212,10 +194,10 @@ jobs:
         git config --local user.name "GitHub Action"
         
         if ! git diff --cached --quiet; then
-          echo "📝 Committing changes..."
+          echo "Committing changes..."
           git pull --rebase --autostash origin main 2>/dev/null || true
-          git commit -m "chore: merge 8-shard results (fixed overwrite bug) $(date '+%Y-%m-%d %H:%M')"
+          git commit -m "chore: merge results $(date '+%Y-%m-%d %H:%M')"
           git push origin main --force-with-lease
         else
-          echo "✅ No changes to commit"
+          echo "No changes to commit"
         fi
