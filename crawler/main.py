@@ -105,7 +105,7 @@ async def main():
                 print("   ⏭️  无待验证节点")
         else:
             print(f"\n⏭️  步骤 3/5: 已跳过验证")
-            valid_nodes = deduplicator.get_recent_nodes(limit=1000)
+            valid_nodes = deduplicator.get_recent_nodes(limit=10000)
             print(f"   📦 加载最近节点: {len(valid_nodes)} 个")
 
         # ================= 步骤 4: 生成订阅文件 =================
