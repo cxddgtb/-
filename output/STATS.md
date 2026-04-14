@@ -1,7 +1,5 @@
 # Proxy Nodes Report
-Generated: 2026-04-13 22:33:03
-Mode: 8-shard parallel merge
+**Last Updated:** 2026-04-14 05:23:16
+**Total Nodes:** 0
 
-## Summary
-- Merged from 8 shards
-- Output files generated in output/
+## Protocol Statistics:
