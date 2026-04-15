@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Validator Module - 极速并发网络验证
+Validator Module - 极速并发网络验证 (Python 3.11 兼容)
 """
 
 import aiohttp
@@ -12,17 +12,11 @@ class Validator:
         self.semaphore = asyncio.Semaphore(max_concurrent)
 
     async def check_node(self, session: aiohttp.ClientSession, link: str) -> bool:
-        """
-        验证单个节点连通性
-        策略：建立 TCP 连接即视为有效（不发送真实流量，为了速度）
-        """
+        """快速 TCP 端口连通性测试"""
         async with self.semaphore:
             try:
-                # 解析 Host 和 Port (简化版，适用于大部分节点)
-                # 格式: protocol://user:pass@host:port...
                 if '@' not in link: return False
                 after_at = link.split('@')[1]
-                # 提取 host:port (忽略 path 和 query)
                 host_port = after_at.split('/')[0].split('?')[0]
                 if ':' not in host_port: return False
                 
@@ -31,7 +25,7 @@ class Validator:
                 
                 if not (0 < port <= 65535): return False
 
-                # 快速 TCP 握手测试 (超时 2秒)
+                # 2秒超时 TCP 握手
                 reader, writer = await asyncio.wait_for(
                     asyncio.open_connection(host, port),
                     timeout=2.0
@@ -39,10 +33,10 @@ class Validator:
                 writer.close()
                 await writer.wait_closed()
                 return True
-            except:
+            except Exception:
                 return False
 
-    async def validate_batch(self, links: List[str]) -> List[str]:
+    async def validate_batch(self, links: list[str]) -> list[str]:
         """并发验证一批链接"""
         if not links: return []
         
