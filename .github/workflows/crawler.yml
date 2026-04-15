@@ -1,9 +1,9 @@
-name: Proxy Node Crawler (Ultimate Single Job)
+name: Proxy Node Crawler (Archive & Refill)
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # 每 6 小时运行一次
-  workflow_dispatch:
+    - cron: '0 */6 * * *'  # 每 6 小时自动运行一次
+  workflow_dispatch:       # 允许手动触发
 
 permissions:
   contents: write
@@ -11,10 +11,10 @@ permissions:
 jobs:
   crawl-and-validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 360  # 🔥 6 小时超时，确保能验证大量节点
+    timeout-minutes: 360   # 6小时最大运行时间，确保充足验证时间
     
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -30,10 +30,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Create directories
+    - name: Create required directories
       run: |
-        mkdir -p database logs output
+        mkdir -p database logs output archives
         touch database/.gitkeep
+        touch archives/.gitkeep
         
     - name: Run Ultimate Crawler
       env:
@@ -41,15 +42,28 @@ jobs:
       run: |
         python -m crawler.main
         
-    - name: Commit results
+    - name: Commit results & archives
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
+        # 🔥 忽略数据库文件（避免超过 100MB 限制）
         git update-index --assume-unchanged database/nodes.db 2>/dev/null || true
-        git add output/
+        git reset database/nodes.db 2>/dev/null || true
         
-        git diff --quiet && git diff --staged --quiet || (
-          git commit -m "chore: update proxy nodes $(date '+%Y-%m-%d %H:%M')" &&
+        # 🔥 关键修改：同时提交 output 和 archives 目录
+        git add output/ archives/
+        
+        # 仅在检测到变更时提交推送
+        if ! git diff --cached --quiet; then
+          echo "📝 Changes detected, preparing to commit..."
+          
+          # 拉取最新代码防止冲突
+          git pull --rebase --autostash origin main 2>/dev/null || true
+          
+          git commit -m "chore: update nodes & archives $(date '+%Y-%m-%d %H:%M')"
           git push origin main --force-with-lease
-        )
+          echo "✅ Pushed successfully."
+        else
+          echo "✅ No changes to commit."
+        fi
