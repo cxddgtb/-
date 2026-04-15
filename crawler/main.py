@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Main Controller - 单任务流、全量爬取、混合验证 (修复版)
+Main Controller - 单任务流 + 档案回填机制 (终极稳定版)
 """
 
 import asyncio
 import os
 import sys
-import json
 from datetime import datetime
 from pathlib import Path
 
@@ -16,19 +15,19 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 try:
     from crawler.scraper import Scraper
     from crawler.validator import Validator
-    from crawler.deduplicator import NodeDeduplicator
+    from crawler.archiver import Archiver  # 🔥 引入档案模块
 except ImportError as e:
     print(f"❌ 模块导入失败: {e}")
     sys.exit(1)
 
 async def main():
-    print("🚀 启动强力节点爬虫 (Single Job Mode)")
+    print("🚀 启动强力节点爬虫 (Archive & Refill Mode)")
     print("="*60)
     
     token = os.getenv("GITHUB_TOKEN", "")
     scraper = Scraper(token)
-    validator = Validator(max_concurrent=80)
-    db = NodeDeduplicator()
+    validator = Validator(max_concurrent=100) # 提高并发加速验证
+    archiver = Archiver() # 初始化档案管理器
 
     # 1. 爬取阶段
     print("\n🕷️  Phase 1: Aggressive Crawling...")
@@ -36,7 +35,6 @@ async def main():
     
     # 并行搜索代码和仓库
     tasks = []
-    # 限制查询数量以防止 API 超时
     for q in scraper.code_queries[:5]: 
         tasks.append(scraper.search_code(q))
     for q in scraper.repo_keywords[:5]:
@@ -52,7 +50,6 @@ async def main():
                 # 处理 Code Search 结果
                 if "text_matches" in item and item["text_matches"]:
                     content = "\n".join([m.get('fragment', '') for m in item['text_matches']])
-                # 处理 Repo Search 结果 (通常不直接包含节点，这里主要靠 Code Search)
                 
                 if content:
                     links = scraper.extract_nodes(content)
@@ -62,88 +59,67 @@ async def main():
 
     print(f"📊 Raw links extracted: {len(all_raw_links)}")
 
-    # 2. 入库与去重
-    print("\n💾 Phase 2: Deduplication & DB Storage...")
-    nodes_data = [{'link': l, 'protocol': l.split('://')[0]} for l in all_raw_links]
-    db.add_or_update_nodes(nodes_data, batch_size=200)
-    print("✅ Links saved to database")
+    # 2. 验证新节点
+    print("\n🔍 Phase 2: Validating new nodes...")
+    valid_links = []
+    if all_raw_links:
+        valid_links = await validator.validate_batch(all_raw_links)
+        print(f"✅ Newly verified: {len(valid_links)} nodes")
+    else:
+        print("⚠️ No raw links to validate.")
 
-    # 3. 混合验证阶段
-    print("\n🔍 Phase 3: Hybrid Validation...")
-    
-    # 获取所有未验证或最近失败的节点 (最多验证 1000 个)
-    pending_links = [n['link'] for n in db.get_recent_nodes(limit=1000)]
-    print(f"🔄 Validating {len(pending_links)} pending nodes...")
-    
-    newly_valid = []
-    if pending_links:
-        newly_valid = await validator.validate_batch(pending_links)
-        print(f"✅ Newly verified: {len(newly_valid)} nodes")
-        
-        # 更新数据库状态
-        valid_update_data = [{'link': l, 'is_valid': True, 'latency_ms': 10} for l in newly_valid]
-        invalid_update_data = [{'link': l, 'is_valid': False, 'latency_ms': 9999} for l in pending_links if l not in newly_valid]
-        
-        db.update_validation_results(valid_update_data)
-        db.update_validation_results(invalid_update_data)
+    # 3. 保存到今日档案 (关键步骤！)
+    print("\n💾 Phase 3: Archiving...")
+    valid_links = archiver.save_daily(valid_links)
 
-    # 4. 提取最终结果 (Top 5000) - 🔥 修复了 AttributeError
-    print("\n📦 Phase 4: Generating Final List (Top 5000)...")
+    # 4. 智能回填 (Refill Strategy)
+    print("\n🔄 Phase 4: Smart Refill (Target: 5000)...")
+    current_count = len(valid_links)
     
-    final_nodes = []
-    
-    # 1. 优先添加刚刚验证通过的新节点
-    if newly_valid:
-        final_nodes.extend([{'link': l, 'protocol': l.split('://')[0]} for l in newly_valid])
-        print(f"   Added {len(newly_valid)} newly verified nodes")
+    if current_count < 5000:
+        print(f"⚠️ Current nodes ({current_count}) < 5000. Activating refill...")
         
-    # 2. 尝试从数据库获取历史节点补充 (使用 get_recent_nodes 避免报错)
-    try:
-        history_nodes = db.get_recent_nodes(limit=2000)
-        count = 0
-        for n in history_nodes:
-            link = n.get('link')
-            # 如果数据库标记为有效，且不在新验证列表中，则加入
-            if n.get('is_valid') and link not in newly_valid:
-                final_nodes.append(n)
-                count += 1
-        if count > 0:
-            print(f"   Added {count} historical valid nodes from DB")
-    except Exception as e:
-        print(f"   ⚠️ Failed to load history nodes: {e}")
+        # 1. 从最近 10 个档案加载历史节点
+        backups = archiver.load_recent_archives(limit=10)
         
-    # 3. 去重 (基于 link)
-    seen_links = set()
-    unique_nodes = []
-    for node in final_nodes:
-        link = node.get('link')
-        if link and link not in seen_links:
-            seen_links.add(link)
-            unique_nodes.append(node)
-    
-    final_nodes = unique_nodes[:5000]
-    print(f"✅ Final valid nodes count: {len(final_nodes)}")
+        # 2. 过滤掉已经在今日有效列表中的节点
+        valid_set = set(valid_links)
+        new_backups = [b for b in backups if b not in valid_set]
+        print(f"   Found {len(new_backups)} unique backup nodes to re-validate.")
+        
+        # 3. 验证这些旧节点 (因为旧节点可能已失效)
+        if new_backups:
+            revalidated_backups = await validator.validate_batch(new_backups)
+            print(f"   ✅ Re-validated {len(revalidated_backups)} backup nodes.")
+            
+            # 4. 合并
+            valid_links.extend(revalidated_backups)
+            print(f"   📈 Total nodes after refill: {len(valid_links)}")
+    else:
+        print(f"✅ Nodes count ({current_count}) sufficient. Skipping refill.")
 
-    # 5. 输出文件
+    # 5. 截断并输出 (最终只保留 5000 个)
+    final_links = valid_links[:5000]
+    print(f"\n📦 Final Output: {len(final_links)} nodes")
+
     output_dir = Path("output")
     output_dir.mkdir(exist_ok=True)
     
-    all_links = [n.get('link', '') for n in final_nodes if n.get('link')]
-    if all_links:
-        (output_dir / "all_sub.txt").write_text("\n".join(all_links))
-        print(f"💾 Saved all_sub.txt ({len(all_links)} links)")
+    # 写入 all_sub.txt
+    if final_links:
+        (output_dir / "all_sub.txt").write_text("\n".join(final_links))
+        print(f"💾 Saved all_sub.txt ({len(final_links)} links)")
     else:
         (output_dir / "all_sub.txt").write_text("")
-        print("⚠️ all_sub.txt is empty (no valid nodes found)")
 
     # 按协议分类
     by_proto = {}
-    for n in final_nodes:
-        p = n.get('protocol', 'unknown')
-        by_proto.setdefault(p, []).append(n)
+    for link in final_links:
+        if "://" in link:
+            proto = link.split("://")[0]
+            by_proto.setdefault(proto, []).append(link)
         
-    for p, nodes in by_proto.items():
-        links = [n['link'] for n in nodes]
+    for p, links in by_proto.items():
         (output_dir / f"{p}_sub.txt").write_text("\n".join(links))
 
     print("="*60)
