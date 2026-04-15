@@ -1,20 +1,17 @@
-name: Proxy Node Crawler (Parallel 8x - FIXED MERGE)
+name: Proxy Node Crawler (Ultimate Single Job)
 
 on:
   schedule:
-    - cron: '0 */5 * * *'
+    - cron: '0 */6 * * *'  # 每 6 小时运行一次
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  crawl-shards:
-    strategy:
-      matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]
-      fail-fast: false
+  crawl-and-validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 360  # 🔥 6 小时超时，确保能验证大量节点
     
     steps:
     - name: Checkout
@@ -35,169 +32,24 @@ jobs:
         
     - name: Create directories
       run: |
-        mkdir -p database logs output shard-${{ matrix.shard }}
+        mkdir -p database logs output
         touch database/.gitkeep
         
-    - name: Run crawler (shard ${{ matrix.shard }})
+    - name: Run Ultimate Crawler
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python -m crawler.main --shard ${{ matrix.shard }} --skip-validate
+        python -m crawler.main
         
-    - name: Save shard output
+    - name: Commit results
       run: |
-        cp -r output/* shard-${{ matrix.shard }}/ 2>/dev/null || true
-        mv database/nodes.db shard-${{ matrix.shard }}/nodes_shard_${{ matrix.shard }}.db 2>/dev/null || true
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         
-    - name: Upload shard artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: shard-${{ matrix.shard }}-results
-        path: shard-${{ matrix.shard }}/
-        retention-days: 1
-
-  merge-results:
-    needs: crawl-shards
-    runs-on: ubuntu-latest
-    if: always()
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        fetch-depth: 0
-      
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Download all shard artifacts
-      uses: actions/download-artifact@v4
-      with:
-        pattern: shard-*-results
-        path: downloaded-shards
-        # 关键修复：不要 merge-multiple，防止文件覆盖
-    
-    - name: Debug Check downloaded structure
-      run: |
-        echo "Checking downloaded files..."
-        find downloaded-shards -type f -name "*.txt" | head -20
-        
-    - name: Merge databases
-      run: |
-        mkdir -p database output
-        python3 << 'PYCODE'
-        import sqlite3
-        from pathlib import Path
-        
-        main_db = 'database/nodes.db'
-        shard_dbs = list(Path('downloaded-shards').glob('*/nodes_shard_*.db'))
-        Path('database').mkdir(exist_ok=True)
-        
-        if shard_dbs:
-            print(f'Merging {len(shard_dbs)} databases...')
-            from crawler.deduplicator import NodeDeduplicator
-            dedup = NodeDeduplicator(main_db)
-            dedup.merge_databases([str(p) for p in shard_dbs])
-            stats = dedup.get_stats()
-            print(f'DB merged: total={stats.get("total", 0)}')
-        else:
-            print('No shard databases found.')
-        PYCODE
-        
-    - name: Merge output files
-      run: |
-        python3 << 'PYCODE'
-        from pathlib import Path
-        from datetime import datetime
-
-        output_dir = Path('output')
-        output_dir.mkdir(exist_ok=True)
-        
-        print("Starting merge...")
-        shard_dirs = list(Path('downloaded-shards').glob('shard-*-results'))
-        print(f"Found {len(shard_dirs)} shard directories.")
-        
-        protocols = ['vless', 'hysteria2', 'tuic', 'trojan', 'shadowsocks', 'naiveproxy', 'shadowtls', 'anytls']
-        total_links = 0
-        
-        for proto in protocols:
-            all_links = set()
-            for shard_dir in shard_dirs:
-                proto_file = shard_dir / f"{proto}_sub.txt"
-                if proto_file.exists():
-                    try:
-                        content = proto_file.read_text(encoding='utf-8', errors='ignore')
-                        links = [l.strip() for l in content.split('\n') if l.strip() and '://' in l]
-                        all_links.update(links)
-                    except: pass
-            
-            if all_links:
-                (output_dir / f'{proto}_sub.txt').write_text('\n'.join(sorted(all_links)))
-                count = len(all_links)
-                total_links += count
-                print(f"Merged {proto}: {count} links")
-            else:
-                (output_dir / f'{proto}_sub.txt').write_text('')
-                print(f"Merged {proto}: 0 links")
-
-        # Generate all_sub.txt
-        all_global = set()
-        for f in output_dir.glob('*_sub.txt'):
-            if f.name == 'all_sub.txt': continue
-            try:
-                c = f.read_text(errors='ignore')
-                all_global.update([l.strip() for l in c.split('\n') if l.strip() and '://' in l])
-            except: pass
-        
-        if all_global:
-            (output_dir / 'all_sub.txt').write_text('\n'.join(sorted(all_global)))
-            print(f"Generated all_sub.txt: {len(all_global)} links")
-        else:
-            (output_dir / 'all_sub.txt').write_text('')
-            print("Generated all_sub.txt: 0 links")
-            
-        # Generate Report
-        report = [
-            '# Proxy Nodes Report',
-            f'Last Updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
-            f'Total Nodes: {total_links}',
-            ''
-        ]
-        (output_dir / 'STATS.md').write_text('\n'.join(report))
-        print("Merge completed.")
-        PYCODE
-        
-    - name: Fix git state
-      run: |
         git update-index --assume-unchanged database/nodes.db 2>/dev/null || true
-        git reset database/nodes.db 2>/dev/null || true
-        rm -rf downloaded-shards/ 2>/dev/null || true
-        git add output/*.txt output/*.json output/*.md 2>/dev/null || true
+        git add output/
         
-    - name: Pull before push
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git pull --rebase --autostash origin main 2>/dev/null || true
-        
-    - name: Commit merged results
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        
-        if ! git diff --cached --quiet; then
-          echo "Committing changes..."
-          git pull --rebase --autostash origin main 2>/dev/null || true
-          git commit -m "chore: merge results $(date '+%Y-%m-%d %H:%M')"
+        git diff --quiet && git diff --staged --quiet || (
+          git commit -m "chore: update proxy nodes $(date '+%Y-%m-%d %H:%M')" &&
           git push origin main --force-with-lease
-        else
-          echo "No changes to commit"
-        fi
+        )
