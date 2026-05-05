@@ -1,0 +1,386 @@
+{
+  "site_name": "EchoTV - 色情源",
+  "announcement": "🔞 成人资源 · 年满18岁使用 · 注意本地法律 · 自备代理 · 仅供测试",
+  "api_site": {
+    "202605050201": {
+      "key": "202605050201",
+      "name": "🔞大地资源",
+      "api": "https://dadiapi.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050202": {
+      "key": "202605050202",
+      "name": "🔞越南资源",
+      "api": "https://vnzyz.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050203": {
+      "key": "202605050203",
+      "name": "🔞黄瓜资源",
+      "api": "https://www.avre06.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050204": {
+      "key": "202605050204",
+      "name": "🔞奥斯卡资源",
+      "api": "http://aosikazy.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050205": {
+      "key": "202605050205",
+      "name": "🔞森林资源",
+      "api": "http://slapibf.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050206": {
+      "key": "202605050206",
+      "name": "🔞色南国资源",
+      "api": "https://api.sexnguon.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050207": {
+      "key": "202605050207",
+      "name": "🔞湿乐园",
+      "api": "https://xxavs.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050208": {
+      "key": "202605050208",
+      "name": "🔞香奶儿",
+      "api": "https://www.gdlsp.com/api/json.php",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050209": {
+      "key": "202605050209",
+      "name": "🔞奶香香资源",
+      "api": "https://naixxzy.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050210": {
+      "key": "202605050210",
+      "name": "🔞AIvin资源",
+      "api": "http://lbapiby.com/api.php/provide/vod/at/json",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050211": {
+      "key": "202605050211",
+      "name": "🔞鸡坤资源",
+      "api": "https://jkunzyapi.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050212": {
+      "key": "202605050212",
+      "name": "🔞番号资源",
+      "api": "http://fhapi9.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050213": {
+      "key": "202605050213",
+      "name": "🔞91MD资源",
+      "api": "http://91md.me/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050214": {
+      "key": "202605050214",
+      "name": "🔞滴滴资源",
+      "api": "https://api.ddapi.cc/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050215": {
+      "key": "202605050215",
+      "name": "🔞淫水机",
+      "api": "https://www.xrbsp.com/api/json.php",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050216": {
+      "key": "202605050216",
+      "name": "🔞白嫖资源",
+      "api": "https://www.kxgav.com/api/json.php",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050217": {
+      "key": "202605050217",
+      "name": "🔞玉兔资源",
+      "api": "https://apiyutu.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050218": {
+      "key": "202605050218",
+      "name": "🔞草榴资源",
+      "api": "https://www.caoliuzyw.com/api.php/prodao/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050219": {
+      "key": "202605050219",
+      "name": "🔞优异资源",
+      "api": "https://a.uezy.pw/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050220": {
+      "key": "202605050220",
+      "name": "🔞91视频资源",
+      "api": "https://91av.cyou/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050221": {
+      "key": "202605050221",
+      "name": "🔞黄AV资源",
+      "api": "https://www.pgxdy.com/api/xml.php",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050222": {
+      "key": "202605050222",
+      "name": "🔞橘猫资源",
+      "api": "https://to.to-long.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050223": {
+      "key": "202605050223",
+      "name": "🔞老色逼资源",
+      "api": "https://apilsbzy1.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050224": {
+      "key": "202605050224",
+      "name": "🔞鲨鱼资源",
+      "api": "https://shayuapi.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050225": {
+      "key": "202605050225",
+      "name": "🔞乐播资源",
+      "api": "https://lbapi9.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050226": {
+      "key": "202605050226",
+      "name": "🔞精品资源",
+      "api": "https://www.jingpinx.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050227": {
+      "key": "202605050227",
+      "name": "🔞辣椒资源",
+      "api": "https://apilj.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050228": {
+      "key": "202605050228",
+      "name": "🔞CK资源",
+      "api": "https://ckzy.me/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050229": {
+      "key": "202605050229",
+      "name": "🔞美少女资源",
+      "api": "https://www.msnii.com/api/xml.php",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050230": {
+      "key": "202605050230",
+      "name": "🔞久久热资源",
+      "api": "https://www.jiujiure00.com/api.php/Prodao/vod/at/xml/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050231": {
+      "key": "202605050231",
+      "name": "🔞杏吧资源",
+      "api": "https://xingba222.com/api.php/provide/vod/at/xml",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050232": {
+      "key": "202605050232",
+      "name": "🔞115资源",
+      "api": "https://155api.com/api.php/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050233": {
+      "key": "202605050233",
+      "name": "🔞黄色仓库",
+      "api": "https://hsckzy888.com/api.php/provide/vod/at/xml/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050234": {
+      "key": "202605050234",
+      "name": "🔞大奶子资源",
+      "api": "https://apidanaizi.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050235": {
+      "key": "202605050235",
+      "name": "🔞X细胞资源",
+      "api": "https://www.xxibaozyw.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050236": {
+      "key": "202605050236",
+      "name": "🔞souav资源",
+      "api": "https://api.souavzy.vip/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050237": {
+      "key": "202605050237",
+      "name": "🔞百花资源",
+      "api": "https://bhziyuan.com/api.php/provide/vod/at/xml",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050238": {
+      "key": "202605050238",
+      "name": "🔞番茄资源",
+      "api": "https://fqzy4.me/api.php/provide/vod/at/xml",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050239": {
+      "key": "202605050239",
+      "name": "🔞小鸡资源",
+      "api": "https://api.xiaojizy.live/provide/vod/",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050240": {
+      "key": "202605050240",
+      "name": "🔞黑料资源",
+      "api": "https://heiliaozyapi.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050241": {
+      "key": "202605050241",
+      "name": "🔞百万资源",
+      "api": "https://api.bwzyz.com/api.php/provide/vod",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    },
+    "202605050242": {
+      "key": "202605050242",
+      "name": "🔞红牛成人",
+      "api": "http://hongniuzy2.com/api.php/provide/vod/from/hnm3u8",
+      "detail": null,
+      "from": "custom",
+      "disabled": false,
+      "subscriptionId": null
+    }
+  },
+  "lives": {},
+  "custom_category": []
+}
