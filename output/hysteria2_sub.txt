@@ -1,1 +1,1 @@
-hysteria2://JxKkbGrtBX@38.207.136.242:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E6%97%A5%E6%9C%AC-hysteria2
+hysteria2://iitlbvhHhh@154.12.63.76:443?security=tls&insecure=1&sni=snap.licdn.com&fastopen=0#%E9%A6%99%E6%B8%AF-hysteria2
