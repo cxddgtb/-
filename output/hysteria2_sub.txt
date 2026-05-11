@@ -1,1 +1,1 @@
-hysteria2://iitlbvhHhh@154.12.63.76:443?security=tls&insecure=1&sni=snap.licdn.com&fastopen=0#%E9%A6%99%E6%B8%AF-hysteria2
+hysteria2://dongtaiwang.com@62.210.124.146:22000?security=tls&sni=www.microsoft.com&allowInsecure=true#%5B1596%5D%F0%9F%8E%88%20%F0%9F%87%AB%F0%9F%87%B7%20FRA%20%5BH2%5D%20%F0%9F%8E%88%20%F0%9F%9A%80%20%23850e9b
