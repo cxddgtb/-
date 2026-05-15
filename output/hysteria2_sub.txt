@@ -1,2 +1,1 @@
-hysteria2://OIJLuzVwkI@104.225.159.5:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E7%BE%8E%E5%9B%BD-hysteria2
-hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?insecure=1&sni=washing.help#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://dongtaiwang.com@62.210.124.146:22000?security=tls&sni=www.microsoft.com&allowInsecure=true#%5B1596%5D%F0%9F%8E%88%20%F0%9F%87%AB%F0%9F%87%B7%20FRA%20%5BH2%5D%20%F0%9F%8E%88%20%F0%9F%9A%80%20%23850e9b
