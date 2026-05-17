@@ -1,1 +1,1 @@
-hysteria2://qQe1z5kU8kN6SlKnDt9Ru3Qp@43.200.123.45:443?insecure=1&sni=https%3A%2F%2Ft.me%2Fzmxooo#台湾@zmxooo2
+hysteria2://OIJLuzVwkI@104.225.159.5:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E7%BE%8E%E5%9B%BD-hysteria2
