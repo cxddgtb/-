@@ -1,1 +1,2 @@
-hysteria2://qQe1z5kU8kN6SlKnDt9Ru3Qp@43.200.123.45:443?insecure=1&sni=https%3A%2F%2Ft.me%2Fzmxooo#台湾@zmxooo2
+hysteria2://iitlbvhHhh@154.12.63.76:443?security=tls&insecure=1&sni=snap.licdn.com&fastopen=0#%E9%A6%99%E6%B8%AF-hysteria2
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?sni=washing.help&insecure=1&allowInsecure=1#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
