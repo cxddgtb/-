@@ -1,2 +1,2 @@
-hysteria2://10550754-cf62-3d3b-ba6a-50be27a275d7@185.106.96.231:443?sni=s559.ccgfw.top&insecure=1#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%2C%20San%20Francisco%20%7C%20%5BBL%5D
-hysteria2://OIJLuzVwkI@104.225.159.5:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E7%BE%8E%E5%9B%BD-hysteria2
+hysteria2://hy2_nrsipx3s:zpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?security=tls&insecure=1&sni=washing.help#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://iitlbvhHhh@154.12.63.76:443?security=tls&insecure=1&sni=snap.licdn.com&fastopen=0#%E9%A6%99%E6%B8%AF-hysteria2
