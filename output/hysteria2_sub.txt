@@ -1,1 +1,1 @@
-hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?sni=washing.help&insecure=1&allowInsecure=1#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s663.ccgfw.top:443?sni=s663.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1309%20%7C%20free-nodes
