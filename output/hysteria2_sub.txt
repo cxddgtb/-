@@ -1,1 +1,1 @@
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s473.okgfw.top:443?sni=s473.okgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1382%20%7C%20free-nodes
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s844.ccgfw.top:443?sni=s844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1308%20%7C%20free-nodes
