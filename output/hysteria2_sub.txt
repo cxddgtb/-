@@ -1,4 +1,2 @@
-hysteria2://iitlbvhHhh@154.12.63.76:443?security=tls&insecure=1&sni=snap.licdn.com&fastopen=0#%E9%A6%99%E6%B8%AF-hysteria2
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1280%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s893.ayxj.top:443?sni=s893.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1376%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s663.ccgfw.top:443?sni=s663.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1269%20%7C%20free-nodes
+hysteria2://10550754-cf62-3d3b-ba6a-50be27a275d7@193.53.126.108:443?sni=s463.okgfwbackxyz.xyz&insecure=1#%F0%9F%87%B7%F0%9F%87%BA%20Russia%20%7C%20%F0%9F%8C%90%20%5B%2ACIDR%5D
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s896.ayxj.top:443?sni=s896.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1289%20%7C%20free-nodes
