@@ -1,6 +1,3 @@
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s893.ayxj.top:443?sni=u712032us893.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1484%20%7C%20free-nodes
-hysteria2://dongtaiwang.com@62.210.10.108:22000?sni=www.microsoft.com&insecure=1#Hys2-1.json
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s896.ayxj.top:443?sni=s896.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1289%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s545.ccgfw.online:443?sni=s545.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1284%20%7C%20free-nodes
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s844.ccgfw.top:443?sni=u712927us844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1609%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s545.ccgfw.online:443?sni=s545.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1295%20%7C%20free-nodes
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=u712032us614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1472%20%7C%20free-nodes
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?headerType=none&encryption=none&sni=washing.help&insecure=1#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?security=tls&insecure=1&sni=washing.help#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
