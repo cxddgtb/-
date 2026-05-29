@@ -1,3 +1,1 @@
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1292%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s545.ccgfw.online:443?sni=s545.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1372%20%7C%20free-nodes
-hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?headerType=none&encryption=none&sni=washing.help&insecure=1#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://OIJLuzVwkI@104.225.159.5:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E7%BE%8E%E5%9B%BD-hysteria2
