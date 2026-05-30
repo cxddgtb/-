@@ -1,1 +1,4 @@
-hy2://azadi@168.138.24.90:443?insecure=1&sni=bing.com#%F0%9F%94%92%20HYSTERIA-UDP%20%F0%9F%87%A6%F0%9F%87%BA%20AU-168.138.24.90:443%20%F0%9F%93%A1%20PING-000.00-MS
+hy2://10550754-cf62-3d3b-ba6a-50be27a275d7@195.133.53.33:443/?sni=s516.okgfw.top#%5BAECC.pro%5D%2B%F0%9F%87%B7%F0%9F%87%BA%E4%BF%84%E7%BD%97%E6%96%AF01
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-143%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-144%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-133%20%7C%20free-nodes

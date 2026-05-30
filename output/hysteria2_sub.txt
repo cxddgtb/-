@@ -1,3 +1,6 @@
+hysteria2://OIJLuzVwkI@104.225.159.5:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E7%BE%8E%E5%9B%BD-hysteria2
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s663.ccgfw.top:443?sni=u712927us663.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1796%20%7C%20free-nodes
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?insecure=1&sni=washing.help#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?sni=washing.help&insecure=1&allowInsecure=1#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
 hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s473.okgfw.top:443?sni=u712927us473.okgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1753%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s896.ayxj.top:443?sni=u712032us896.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1494%20%7C%20free-nodes
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s667.ccgfw.top:443?sni=u712927us667.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1735%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s844.ccgfw.top:443?sni=u712927us844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1742%20%7C%20free-nodes
