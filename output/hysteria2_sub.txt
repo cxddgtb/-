@@ -1,2 +1,3 @@
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@150.129.10.140:443?sni=u712927us614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1606%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1292%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s473.okgfw.top:443?sni=u712927us473.okgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1753%20%7C%20free-nodes
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s896.ayxj.top:443?sni=u712032us896.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1494%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s667.ccgfw.top:443?sni=u712927us667.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1735%20%7C%20free-nodes
