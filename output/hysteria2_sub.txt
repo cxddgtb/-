@@ -1,1 +1,5 @@
-hysteria2://OIJLuzVwkI@104.225.159.5:443?security=tls&insecure=1&sni=www.fusesbase.com&fastopen=0#%E7%BE%8E%E5%9B%BD-hysteria2
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s545.ccgfw.online:443?sni=u712927us545.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1814%20%7C%20free-nodes
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?security=tls&insecure=1&sni=washing.help#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s545.ccgfw.online:443?sni=u712927us545.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1635%20%7C%20free-nodes
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s896.ayxj.top:443?sni=s896.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1377%20%7C%20free-nodes
+hysteria2://10550754-cf62-3d3b-ba6a-50be27a275d7@195.133.53.33:443?insecure=0&fp=&sni=s516.okgfw.top#%F0%9F%87%B7%F0%9F%87%BA%20Russia%20%7C%20%F0%9F%8C%90%20%7C%20%5BIPv6%5D%20%7C%20%5BBL%5D
