@@ -1,2 +1,6 @@
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@5.175.183.35:443?sni=u712927us250.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-204%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s844.ccgfw.top:443?sni=s844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1308%20%7C%20free-nodes
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=u712032us614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1472%20%7C%20free-nodes
+hysteria2://10550754-cf62-3d3b-ba6a-50be27a275d7@185.106.96.231:443?insecure=0&alpn=h3&fp=&sni=s559.ccgfw.top#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%2C%20San%20Francisco%20%7C%20%5BBL%5D
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@31.59.129.225:443?sni=u712927us1218.csgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-166%20%7C%20free-nodes
+hysteria2://10550754-cf62-3d3b-ba6a-50be27a275d7@195.133.53.33:443?insecure=0&fp=&sni=s516.okgfw.top#%F0%9F%87%B7%F0%9F%87%BA%20Russia%20%7C%20%F0%9F%8C%90%20%7C%20%5BIPv6%5D%20%7C%20%5BBL%5D
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s844.ccgfw.top:443?sni=u712927us844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1742%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@104.168.76.175:443?sni=u712927us175.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-164%20%7C%20free-nodes
