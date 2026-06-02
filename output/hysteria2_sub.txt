@@ -1,4 +1,8 @@
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s663.ccgfw.top:443?sni=s663.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1283%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1318%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1368%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1292%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s869.okgfwbackxyz.xyz:443?sni=u712927us869.okgfwbackxyz.xyz&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-181%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s473.okgfw.top:443?sni=u712927us473.okgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1753%20%7C%20free-nodes
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s473.okgfw.top:443?sni=u712927us473.okgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1813%20%7C%20free-nodes
+hysteria2://hy2_nrsipx3s%3AzpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?sni=washing.help&insecure=1&allowInsecure=1#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s844.ccgfw.top:443?sni=u712927us844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1485%20%7C%20free-nodes
+hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s663.ccgfw.top:443?sni=s663.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1269%20%7C%20free-nodes
+hysteria2://hy2_nrsipx3s:zpQI3Vu7o9NdC6rS3L8JYXC7Q58HYUjv@lv2.cleanersaz.help:443?security=tls&insecure=1&sni=washing.help#%F0%9F%87%B1%F0%9F%87%BB%20Latvia%20%5B%2ACIDR%5D
+hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@150.129.10.140:443?sni=u712927us614.ccgfw.online&alpn=h3&mport=30000-32000&hopinterval=30s#%E6%9C%AA%E7%9F%A5%20HY2-1788%20%7C%20free-nodes
