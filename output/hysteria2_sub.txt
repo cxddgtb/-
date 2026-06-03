@@ -1,4 +1,4 @@
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s667.ccgfw.top:443?sni=u712927us667.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-169%20%7C%20free-nodes
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@82.47.22.163:443?sni=u712927us372.okgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#TW%20HY2-184%20%7C%20free-nodes
-hysteria2://bc7c7c10-8f24-332e-b303-fb3c8943c24f@s663.ccgfw.top:443?sni=u712927us663.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#DE%20HY2-1490%20%7C%20free-nodes
-hysteria2://6d49fae1-374d-313e-b360-1227b0ea8dea@s844.ccgfw.top:443?sni=u712032us844.ccgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-1475%20%7C%20free-nodes
+hysteria2://205d6869-02ca-3b36-b933-be2465250c7e@158.247.196.19:443?sni=u716087us1311.csgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#KR%20HY2-163%20%7C%20free-nodes
+hysteria2://dongtaiwang.com@62.210.124.146:22000?security=tls&sni=www.microsoft.com&allowInsecure=true#%5B1596%5D%F0%9F%8E%88%20%F0%9F%87%AB%F0%9F%87%B7%20FRA%20%5BH2%5D%20%F0%9F%8E%88%20%F0%9F%9A%80%20%23850e9b
+hysteria2://205d6869-02ca-3b36-b933-be2465250c7e@139.84.155.186:443?sni=u716087us1441.csgfw.top&alpn=h3&mport=30000-32000&hopinterval=30s#RU%20HY2-190%20%7C%20free-nodes
+hysteria2://205d6869-02ca-3b36-b933-be2465250c7e@104.168.76.175:443?sni=u716087us175.ayxj.top&alpn=h3&mport=30000-32000&hopinterval=30s#US%20HY2-161%20%7C%20free-nodes
