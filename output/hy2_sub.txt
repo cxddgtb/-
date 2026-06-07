@@ -1,3 +1,3 @@
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-140%20%7C%20free-nodes
-hy2://w9QUthomlprocHo@136.244.112.121:443/?insecure=1&sni=www.google.com#%40EUT_VPN
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-128%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-1063%20%7C%20free-nodes
+hy2://Masir_Sefid@84.234.29.71:443?sni=free2.masir-sefid.shop&obfs=salamander&obfs-password=Masir_Sefid#hy2%20399%20-%20399
+hy2://f7cb07a0-e6f9-4d22-a60e-c61854450c89@sg2.yuntong.click:443?sni=sg2.yuntong.click&obfs=salamander&obfs-password=eNM%2FNfxTsBqQIKcN0ezARS1z0f5mIxRd9GSwhVsyJlo%3D#hy2%20271%20-%20271
