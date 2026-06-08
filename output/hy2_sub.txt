@@ -1,2 +1,4 @@
-hy2://Masir_Sefid@18.194.238.82:443?sni=qus.masir-sefid.shop&obfs=salamander&obfs-password=Masir_Sefid#hy2%20623%20-%20623
-hy2://10550754-cf62-3d3b-ba6a-50be27a275d7@195.133.53.33:443/?sni=s516.okgfw.top#%5BAECC.pro%5D%2B%F0%9F%87%B7%F0%9F%87%BA%E4%BF%84%E7%BD%97%E6%96%AF01
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-143%20%7C%20free-nodes
+hy2://f40b1e441addaec3@45.76.44.57:443/?insecure=1&sni=google.co&obfs=salamander&obfs-password=2db7b42a#%40EUT_VPN%20%7C%20HYSTERIA%20%7C
+hy2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@hy2.aspidnet.xyz:443?sni=hy2.aspidnet.xyz&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#hy2%2086%20-%2086
+hy2://Masir_Sefid@84.234.29.71:443?sni=free2.masir-sefid.shop&obfs=salamander&obfs-password=Masir_Sefid#hy2%20399%20-%20399
