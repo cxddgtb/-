@@ -1,2 +1,2 @@
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-126%20%7C%20free-nodes
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3#%E6%9C%AA%E7%9F%A5%20HY2-1041%20%7C%20free-nodes
+hy2://Masir_Sefid@84.234.29.71:443?sni=free2.masir-sefid.shop&obfs=salamander&obfs-password=Masir_Sefid#hy2%20399%20-%20399
+hy2://fe9b17e8-41e1-4d1b-b588-93a23665724f@84.200.33.151:2056?sni=nlb1.mangshe.xyz&insecure=1#hy2%20111%20-%20111
