@@ -1,4 +1,2 @@
-hy2://wSu8KVl38ul4t9a2eA5foAVaS9MR5U@103.195.189.54:443?insecure=1&amp;sni=google.com#Hysteria
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-153%20%7C%20free-nodes
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@130.185.239.145:443?sni=s545.ccgfw.online&alpn=h3#US%20HY2-1044%20%7C%20free-nodes
-hy2://8c831d06a03b7ade@45.15.157.181:443?insecure=1&sni=www.google.com#%F0%9F%94%92%20HYSTERIA-UDP%20%F0%9F%87%AB%F0%9F%87%B7%20FR-45.15.157.181:443%20%F0%9F%93%A1%20PING-156.51-MS
+hy2://a305ac08-d136-11ee-b6db-f23c91cfbbc9@ffc60249-t53wg0-t92wi1-1qkeg.hk2.hyhuawei.com:443?sni=ffc60249-t53wg0-t92wi1-1qkeg.hk2.hyhuawei.com#hy2%2058%20-%2058
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-138%20%7C%20free-nodes
