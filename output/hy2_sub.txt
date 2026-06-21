@@ -1,3 +1,1 @@
-hy2://wSu8KVl38ul4t9a2eA5foAVaS9MR5U@103.195.189.54:443?insecure=1&amp;sni=google.com#Hysteria
-hy2://masir_sefid@18.194.63.255:443?sni=content.masir-sefid.shop&obfs=salamander&obfs-password=masir_sefid#hy2%20692%20-%20692
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-144%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-150%20%7C%20free-nodes
