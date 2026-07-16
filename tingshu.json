@@ -1,26 +1,26 @@
 [
   {
-    "id": "my_tingshu_source_001",
-    "name": "🎧 我的精选源 - 综合听书",
-    "url": "https://api.your-domain.com/source1", 
-    "type": "api",
-    "comment": "这是一个综合类听书源，支持网络小说和评书。",
-    "version": 1
+    "id": "real_source_001",
+    "name": "🎧 免费听书网 (Web)",
+    "url": "http://m.tingbook.cc/",
+    "type": "web",
+    "comment": "提供免费网络小说和有声书，无需登录",
+    "version": 1,
+    "ruleSearch": {
+      "url": "http://m.tingbook.cc/search.php?searchword=@keyword",
+      "bookList": ".book-ol > li",
+      "name": "a",
+      "author": ".book-meta",
+      "cover": "img",
+      "detailUrl": "a.href"
+    }
   },
   {
-    "id": "my_tingshu_source_002",
-    "name": "🎵 我的精选源 - 音乐与播客",
-    "url": "https://api.your-domain.com/source2",
-    "type": "api",
-    "comment": "专门用于收听音乐电台和播客节目。",
-    "version": 1
-  },
-  {
-    "id": "my_tingshu_source_003",
-    "name": "📚 我的精选源 - 百度网盘直连",
-    "url": "local://aliyundrive",
-    "type": "local",
-    "comment": "本地/网盘聚合源，需提前配置好网盘授权。",
+    "id": "real_source_002",
+    "name": "📻 喜马拉雅 (第三方解析)",
+    "url": "https://www.ximalaya.com/",
+    "type": "web",
+    "comment": "需配合第三方解析接口使用，此处为占位示例",
     "version": 1
   }
 ]
