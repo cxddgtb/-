@@ -1,0 +1,26 @@
+[
+  {
+    "id": "my_tingshu_source_001",
+    "name": "🎧 我的精选源 - 综合听书",
+    "url": "https://api.your-domain.com/source1", 
+    "type": "api",
+    "comment": "这是一个综合类听书源，支持网络小说和评书。",
+    "version": 1
+  },
+  {
+    "id": "my_tingshu_source_002",
+    "name": "🎵 我的精选源 - 音乐与播客",
+    "url": "https://api.your-domain.com/source2",
+    "type": "api",
+    "comment": "专门用于收听音乐电台和播客节目。",
+    "version": 1
+  },
+  {
+    "id": "my_tingshu_source_003",
+    "name": "📚 我的精选源 - 百度网盘直连",
+    "url": "local://aliyundrive",
+    "type": "local",
+    "comment": "本地/网盘聚合源，需提前配置好网盘授权。",
+    "version": 1
+  }
+]
