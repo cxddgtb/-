@@ -1,1 +1,1 @@
-hy2://29794dae-06ca-4b62-94f2-220b5858d39b@us-lax-dc12-003.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20152%20-%20152
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@kr-icn-dc12-004.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20129%20-%20129
