@@ -1,10 +1,1 @@
-vmess://567f4be5-12ab-42e1-b8d9-db6fd1fdd31c@3h-kazakhstan1.09vpn.com:80?encryption=auto&type=ws&path=/vmess/&sni=wrmelmwxlf.gktevlrqznwqqozy.fabpfs66gizmnojhcvqxwl.kytrcfzqla87gvgvs6c7kjnrubuh.cc#🏳️
-vmess://e7c302f3-90d6-42dd-9d7d-94a3683a3707@146.56.112.110:8888?encryption=auto&type=tcp#🏳️
-vmess://6733c357-ba11-4e9f-f00f-7d87f2776ff9@140.83.51.161:25686?encryption=auto&type=ws&path=/cctv13.m3u8&sni=jp02.a0a.xyz#🇯🇵
-vmess://a3e3a710-79f8-4ae0-b83c-607aab40d197@61.245.11.60:80?encryption=auto&type=ws&path=/vmess/#🏳️
-vmess://b65a2d69-5634-42a2-e4be-54e8a6176900@165.140.216.142:443?encryption=auto&type=tcp#🇺🇸
-vmess://04621bae-ab36-11ec-b909-0242ac120002@5.188.190.252:22324?encryption=auto&type=tcp#🇹🇷
-vmess://9855f1f0-a800-40d4-8b38-c7d3eb79302d@94.131.108.36:443?encryption=auto&type=ws#🇹🇷
-vmess://f836c736-87fc-4fde-aabc-00857ecdff3e@129.146.77.248:39495?encryption=auto&type=ws&path=/cctv13.m3u8#🇺🇸
-vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@67.220.85.46:18000?type=raw#🇺🇸
-vmess://e7d72a8d-26f2-4b54-b366-0c43e0bcba7d@165.140.216.141:443?encryption=auto&type=tcp#🇺🇸
+vmess://04621bae-ab36-11ec-b909-0242ac120002@85.90.217.42:22324?encryption=auto&type=tcp#🏳️
