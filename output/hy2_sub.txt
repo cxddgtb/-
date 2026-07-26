@@ -1,1 +1,1 @@
-hy2://hy2_czaawdhc@2.26.92.136:443?sni=nl2.cleanersaz.help&obfs=salamander&obfs-password=lvy1Hw_j4Hwx8oIL2tEa315Sb4t7QrjF#hy2%203%20-%203
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-124%20%7C%20free-nodes
