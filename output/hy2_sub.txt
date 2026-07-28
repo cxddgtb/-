@@ -1,1 +1,1 @@
-hy2://azadi@168.138.24.90:443?insecure=1&sni=bing.com#%F0%9F%94%92%20HYSTERIA-UDP%20%F0%9F%87%A6%F0%9F%87%BA%20AU-168.138.24.90:443%20%F0%9F%93%A1%20PING-000.00-MS
+hy2://Masir_Sefid@84.234.29.71:443?sni=free2.masir-sefid.shop&obfs=salamander&obfs-password=Masir_Sefid#hy2%20399%20-%20399
