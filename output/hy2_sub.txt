@@ -1,4 +1,1 @@
-hy2://9204bccb42c743799c6069feccb7832d@nl1.jamezwin.org:443?sni=nl1.jamezwin.org&obfs=salamander&obfs-password=jmtfanpzqdxu4tn7#hy2%20203%20-%20203
-hy2://29794dae-06ca-4b62-94f2-220b5858d39b@us-lax-dc12-003.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20152%20-%20152
-hy2://Masir_Sefid@84.234.29.71:443?sni=free2.masir-sefid.shop&obfs=salamander&obfs-password=Masir_Sefid#hy2%20399%20-%20399
-hy2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?sni=hy2.aspidnet.xyz&insecure=1&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#hy2%203%20-%203
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-124%20%7C%20free-nodes
