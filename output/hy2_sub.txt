@@ -1,2 +1,1 @@
-hy2://a305ac08-d136-11ee-b6db-f23c91cfbbc9@ffc60249-t53wg0-t92wi1-1qkeg.hk2.hyhuawei.com:443/?sni=ffc60249-t53wg0-t92wi1-1qkeg.hk2.hyhuawei.com#棣冨殶棣冨殺
-hy2://4861843a-3187-4885-83d9-2f69fed13fc9@hkt2.nekohub.xyz:20005?insecure=1&sni=www.bing.com#hysteria2-228789625
+hy2://536a1e178ea00bf2@95.217.211.216:443/?insecure=1&amp;sni=www.google.com&amp;obfs=salamander&amp;obfs-password=05462d067f21387c#%40TUICity%20%7CHYSTERIA%7C
