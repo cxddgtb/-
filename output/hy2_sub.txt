@@ -1,4 +1,2 @@
-hy2://a305ac08-d136-11ee-b6db-f23c91cfbbc9@ffc60249-t53wg0-t92wi1-1qkeg.hk2.hyhuawei.com:443/?sni=ffc60249-t53wg0-t92wi1-1qkeg.hk2.hyhuawei.com#棣冨殶棣冨殺
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3#%E6%9C%AA%E7%9F%A5%20HY2-1054%20%7C%20free-nodes
-hy2://29794dae-06ca-4b62-94f2-220b5858d39b@us-lax-dc12-004.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20229%20-%20229
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3#%E6%9C%AA%E7%9F%A5%20HY2-1041%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-116%20%7C%20free-nodes
+hy2://4861843a-3187-4885-83d9-2f69fed13fc9@hkt1.nekohub.xyz:20007?insecure=1&sni=www.bing.com#hysteria2-228789622
