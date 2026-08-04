@@ -1,1 +1,1 @@
-vmess://d4603cc2-e0ee-4651-83f5-1db5b7168177@129.146.143.80:48111?encryption=auto&type=tcp#🇺🇸
+vmess://04621bae-ab36-11ec-b909-0242ac120002@85.90.217.42:22324?encryption=auto&type=tcp#🏳️
