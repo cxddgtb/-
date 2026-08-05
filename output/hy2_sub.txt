@@ -1,1 +1,2 @@
-hy2://4861843a-3187-4885-83d9-2f69fed13fc9@hkt1.nekohub.xyz:20010?insecure=1&sni=www.bing.com#hysteria2-228194012
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@hk-hkg-dc23-002.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20147%20-%20147
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@kr-icn-dc12-004.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20129%20-%20129
