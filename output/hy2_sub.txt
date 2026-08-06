@@ -1,2 +1,2 @@
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-138%20%7C%20free-nodes
-hy2://29794dae-06ca-4b62-94f2-220b5858d39b@jp-tyo-dc28-004.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20102%20-%20102
+hy2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?sni=hy2.aspidnet.xyz&insecure=1&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#hy2%201%20-%201
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@us-lax-dc12-002.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20127%20-%20127
