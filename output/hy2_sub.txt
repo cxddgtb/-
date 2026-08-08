@@ -1,1 +1,2 @@
-hy2://f40b1e441addaec3@45.76.44.57:443/?insecure=1&sni=google.co&obfs=salamander&obfs-password=2db7b42a#%40EUT_VPN%20%7C%20HYSTERIA%20%7C
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@hk-hkg-dc23-001.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20165%20-%20165
+hy2://gdubbi2zb6gdp0c8@103.251.167.168:443?sni=gettestin.xxee.ru&obfs=salamander&obfs-password=2a7e8084206388f4#hy2%202%20-%202
