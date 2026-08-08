@@ -1,2 +1,3 @@
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@150.129.10.140:443?sni=s614.ccgfw.online&alpn=h3#%E6%9C%AA%E7%9F%A5%20HY2-1041%20%7C%20free-nodes
-hy2://4861843a-3187-4885-83d9-2f69fed13fc9@hkt1.nekohub.xyz:20010?insecure=1&sni=www.bing.com#hysteria2-228194012
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-123%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-151%20%7C%20free-nodes
+hy2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?sni=hy2.aspidnet.xyz&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#hy2%202%20-%202
