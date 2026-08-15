@@ -1,1 +1,2 @@
-hy2://71cada65-d23e-418c-88e4-a06188d14689@2.26.85.26:443?sni=fi-one.quiet-rogue.site#hy2%205%20-%205
+hy2://y0qochAspE+u-HLfrip-@104.21.95.29:443?insecure=1&sni=Google.com&obfs=salamander&obfs-password=2pU%21%26Brls%210exuP%2B%214so#🔒
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-131%20%7C%20free-nodes
