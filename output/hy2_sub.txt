@@ -1,5 +1,2 @@
-hy2://d1224950-ffab-4b9a-8696-431b40a6cfbd@bel-03.node.lumixnet.com:443/?sni=bel-03.node.lumixnet.com#EPODONIOS
-hy2://sOiWCQ2AdIV0OWNuqQVyWp4JZnRxdyLROSjX@cabinet.wwwinternetvideo.click:443/?sni=cabinet.wwwinternetvideo.click#EPODONIOS
-hy2://16ab4d4a-fd81-4535-9b7b-346677226ce8@lin.cryptoofarm.com:443/?sni=lin.cryptoofarm.com#EPODONIOS
-hy2://71cada65-d23e-418c-88e4-a06188d14689@144.31.166.91:443/?sni=de-two.quiet-rogue.site#EPODONIOS
-hy2://df489ab2-2242-4952-a774-1074a3a31f41@eh-spl1.craft-supply.org:8443/?sni=eh-spl1.craft-supply.org#EPODONIOS
+hy2://hy2_czaawdhc%3AVwWo0eBZC9jU3xCE0FuTmbX6xmnj33Iq@2.26.92.136:443?sni=nl2.cleanersaz.help&obfs=salamander&obfs-password=lvy1Hw_j4Hwx8oIL2tEa315Sb4t7QrjF#hy2%202%20-%202
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@hk-hkg-dc23-001.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20165%20-%20165
