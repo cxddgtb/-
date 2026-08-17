@@ -1,2 +1,1 @@
-hy2://hy2_czaawdhc%3AVwWo0eBZC9jU3xCE0FuTmbX6xmnj33Iq@2.26.92.136:443?sni=nl2.cleanersaz.help&obfs=salamander&obfs-password=lvy1Hw_j4Hwx8oIL2tEa315Sb4t7QrjF#hy2%202%20-%202
-hy2://29794dae-06ca-4b62-94f2-220b5858d39b@hk-hkg-dc23-001.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20165%20-%20165
+hy2://EsimHy2Game_7xK9mPq2@31.22.91.243:443?sni=se.esimpson.org&obfs=salamander&obfs-password=EsimObfs_9mK2x7#hy2%206%20-%206
