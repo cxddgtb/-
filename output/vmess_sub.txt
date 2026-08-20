@@ -1,5 +1,2 @@
-vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@23.162.200.198:18000?encryption=auto&security=none&type=tcp#⚛️83@oneclickvpnkeys
-vmess://9a1a05d9-69be-45d3-e326-c6621edf7b31@deapp.jisuyun.top:2053?encryption=auto&path=/devm&security=tls&type=ws#⚛️37@oneclickvpnkeys
-vmess://d4603cc2-e0ee-4651-83f5-1db5b7168177@129.146.143.80:48111?encryption=auto&security=none&type=tcp#⚛️95@oneclickvpnkeys
-vmess://9a1a05d9-69be-45d3-e326-c6621edf7b31@deapp.jisuyun.top:2053?encryption=auto&host=deapp.jisuyun.top&path=/devm&security=tls&sni=deapp.jisuyun.top&type=ws#⚛️70@oneclickvpnkeys
-vmess://d13fc2f5-3e05-4795-81eb-44143a09e552@82.198.246.97:180?encryption=auto&security=none&type=tcp#⚛️94@oneclickvpnkeys
+vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@67.220.85.46:18000?type=raw#🇺🇸
+vmess://f836c736-87fc-4fde-aabc-00857ecdff3e@129.146.77.248:39495?encryption=auto&type=ws&path=/cctv13.m3u8#🇺🇸
