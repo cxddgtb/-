@@ -1,1 +1,1 @@
-hy2://https://xship.2fa.cat@starlink-ft.251313.xyz:443/?insecure=1&sni=www.cloudflare.com#US棣冨毉棣冨毇
+hy2://dongtaiwang.com@62.210.124.146:22000?sni=www.microsoft.com&insecure=1#hy2%201%20-%201
