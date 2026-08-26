@@ -1,1 +1,1 @@
-vmess://04621bae-ab36-11ec-b909-0242ac120002@85.90.217.42:22324?encryption=auto&type=tcp#🏳️
+vmess://9a1a05d9-69be-45d3-e326-c6621edf7b31@deapp.jisuyun.top:2053?encryption=auto&host=deapp.jisuyun.top&path=/devm&security=tls&sni=deapp.jisuyun.top&type=ws#🦁27@oneclickvpnkeys
