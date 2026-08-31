@@ -1,2 +1,1 @@
-hy2://8c831d06a03b7ade@45.15.157.181:443?insecure=1&sni=www.google.com#%F0%9F%94%92%20HYSTERIA-UDP%20%F0%9F%87%AB%F0%9F%87%B7%20FR-45.15.157.181:443%20%F0%9F%93%A1%20PING-156.51-MS
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-151%20%7C%20free-nodes
+hy2://16ab4d4a-fd81-4535-9b7b-346677226ce8@lin.cryptoofarm.com:443/?sni=lin.cryptoofarm.com#EPODONIOS
