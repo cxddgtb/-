@@ -1,1 +1,1 @@
-hy2://16ab4d4a-fd81-4535-9b7b-346677226ce8@lin.cryptoofarm.com:443/?sni=lin.cryptoofarm.com#EPODONIOS
+hy2://71cada65-d23e-418c-88e4-a06188d14689@swe-one.quiet-rogue.site:443?insecure=1&sni=swe-one.quiet-rogue.site#hysteria2-58965449
