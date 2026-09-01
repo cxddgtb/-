@@ -1,1 +1,1 @@
-hy2://71cada65-d23e-418c-88e4-a06188d14689@swe-one.quiet-rogue.site:443?insecure=1&sni=swe-one.quiet-rogue.site#hysteria2-58965449
+hy2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?sni=hy2.aspidnet.xyz&insecure=1&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#hy2%2019%20-%2019
