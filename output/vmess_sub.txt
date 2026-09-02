@@ -1,3 +1,1 @@
-vmess://b65a2d69-5634-42a2-e4be-54e8a6176900@165.140.216.142:443?encryption=auto&security=none&type=tcp#рҹ§®66@oneclickvpnkeys
-vmess://d13fc2f5-3e05-4795-81eb-44143a09e552@82.198.246.37:180?encryption=auto&security=none&type=tcp#рҹ«ҹ68@oneclickvpnkeys
-vmess://a25881f3-967f-3265-bc7f-9e66857b016b@51.81.202.62:80/?type=ws&encryption=auto&host=51.81.202.62&path=%2Fv47-2023unlimitndxd#hichkasЩҶШӘ
+vmess://e7d72a8d-26f2-4b54-b366-0c43e0bcba7d@165.140.216.141:443?encryption=auto&security=none&type=tcp#рҹ§®67@oneclickvpnkeys
