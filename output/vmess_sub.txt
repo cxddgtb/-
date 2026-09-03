@@ -1,1 +1,1 @@
-vmess://e9c4ce52-9a78-4381-b6f8-23350bc4d606@143.198.219.182:80/?type=ws&encryption=auto&path=%2Fv2ray#hichkas%20نت
+vmess://d13fc2f5-3e05-4795-81eb-44143a09e552@82.198.246.97:180?encryption=auto&security=none&type=tcp#⚛️94@oneclickvpnkeys
