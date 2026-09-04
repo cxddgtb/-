@@ -1,4 +1,1 @@
-hy2://umnDU7jgFYUjpVjVM2sW9HL0rRYLJNgzVwRu2HzWEhyZKkRx@de.1.22.washing.help:443?insecure=1&sni=germany1.h2corp.local#%F0%9F%87%A9%F0%9F%87%AA%20%E5%BE%B7%E5%9B%BD%20%7C%20hy2%20%7C%2026
-hy2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?sni=hy2.aspidnet.xyz&insecure=1&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#hy2%203%20-%203
-hy2://wSu8KVl38ul4t9a2eA5foAVaS9MR5U@103.195.189.54:443?insecure=1&amp;sni=google.com#Hysteria
-hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-150%20%7C%20free-nodes
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@hk-hkg-dc23-001.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20165%20-%20165
