@@ -1,2 +1,1 @@
-vmess://b65a2d69-5634-42a2-e4be-54e8a6176900@165.140.216.142:443?encryption=auto&security=none&type=tcp#🧮66@oneclickvpnkeys
-vmess://45b83519-9c4f-4052-a11b-02e017b636d4@47.244.120.197:36703?ed=2048&eh=Sec-WebSocket-Protocol&encryption=auto&path=/arki&security=none&type=ws#🧮72@oneclickvpnkeys
+vmess://9a1a05d9-69be-45d3-e326-c6621edf7b31@deapp.jisuyun.top:2053?encryption=auto&host=deapp.jisuyun.top&path=/devm&security=tls&sni=deapp.jisuyun.top&type=ws#⚛️70@oneclickvpnkeys
