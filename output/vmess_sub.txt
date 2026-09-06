@@ -1,1 +1,1 @@
-vmess://e9c4ce52-9a78-4381-b6f8-23350bc4d606@143.198.219.182:80/?type=ws&encryption=auto&path=%2Fv2ray#hichkas%20ўЖЎ™
+vmess://567f4be5-12ab-42e1-b8d9-db6fd1fdd31c@38.107.234.57:80?encryption=auto&type=ws&path=/vmess/&sni=3h-kazakhstan1.09vpn.com#🏳️
