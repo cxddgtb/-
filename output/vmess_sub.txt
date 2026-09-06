@@ -1,1 +1,1 @@
-vmess://9a1a05d9-69be-45d3-e326-c6621edf7b31@deapp.jisuyun.top:2053?encryption=auto&host=deapp.jisuyun.top&path=/devm&security=tls&sni=deapp.jisuyun.top&type=ws#⚛️70@oneclickvpnkeys
+vmess://e9c4ce52-9a78-4381-b6f8-23350bc4d606@143.198.219.182:80/?type=ws&encryption=auto&path=%2Fv2ray#hichkas%20ўЖЎ™
