@@ -1,1 +1,1 @@
-vmess://04621bae-ab36-11ec-b909-0242ac120002@216.106.183.35:22324?encryption=auto&type=tcp#🇺🇸
+vmess://04621bae-ab36-11ec-b909-0242ac120002@66.163.117.58:22324?encryption=auto&security=none&type=tcp#рҹҸҶ37@oneclickvpnkeys
