@@ -1,2 +1,3 @@
-hy2://16ab4d4a-fd81-4535-9b7b-346677226ce8@lin.cryptoofarm.com:443/?sni=lin.cryptoofarm.com#EPODONIOS
-hy2://dongtaiwang.com@62.210.124.146:22000?sni=www.microsoft.com&insecure=1#hy2%203%20-%203
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@172.245.11.73:443?sni=s246.ccgfw.top&alpn=h3#US%20HY2-124%20%7C%20free-nodes
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@130.185.239.145:443?sni=s545.ccgfw.online&alpn=h3#US%20HY2-1052%20%7C%20free-nodes
+hy2://w9QUthomlprocHo@136.244.112.121:443/?insecure=1&sni=www.google.com#%40EUT_VPN
