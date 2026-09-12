@@ -1,1 +1,2 @@
-hy2://71cada65-d23e-418c-88e4-a06188d14689@swe-one.quiet-rogue.site:443?insecure=1&sni=swe-one.quiet-rogue.site#hysteria2-58965449
+hy2://6aab8efdf13945829ae3699c342be406@fiproxy1.lockdwn.com:443/?sni=fiproxy1.lockdwn.com&obfs=salamander&obfs-password=uw9b2qq5rx#EPODONIOS
+hy2://8f8ccdc5-fe99-38d7-a8a6-422f8c88ef0a@130.185.239.145:443?sni=s545.ccgfw.online&alpn=h3#US%20HY2-1039%20%7C%20free-nodes
