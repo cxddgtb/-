@@ -1,1 +1,2 @@
-vmess://a25881f3-967f-3265-bc7f-9e66857b016b@51.81.202.62:80/?type=ws&encryption=auto&host=51.81.202.62&path=/v47-2023unlimitndxd#hichkasЩҶШӘ#@v2rayconfigamir
+vmess://e7c302f3-90d6-42dd-9d7d-94a3683a3707@146.56.112.110:8888?encryption=auto&type=tcp#🏳️
+vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@67.220.85.46:18000?type=raw#🇺🇸
