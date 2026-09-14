@@ -1,2 +1,2 @@
-vmess://e7c302f3-90d6-42dd-9d7d-94a3683a3707@146.56.112.110:8888?encryption=auto&type=tcp#🏳️
-vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@67.220.85.46:18000?type=raw#🇺🇸
+vmess://d13fc2f5-3e05-4795-81eb-44143a09e552@82.198.246.37:180?encryption=auto&security=none&type=tcp#рҹ«ҹ68@oneclickvpnkeys
+vmess://41a7089a-040b-4538-8b8d-010902405bde@140.238.2.250:443?encryption=auto&type=tcp#🏳️
