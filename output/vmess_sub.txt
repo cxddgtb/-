@@ -1,1 +1,2 @@
-vmess://41a7089a-040b-4538-8b8d-010902405bde@140.238.2.250:443?encryption=auto&type=tcp#🏳️
+vmess://04621bae-ab36-11ec-b909-0242ac120002@85.90.217.42:22324?encryption=auto&type=tcp#🏳️
+vmess://35b89832-0a7c-48dd-8d1c-a2891b522195@45.32.57.118:4433?encryption=auto&security=none&type=tcp%23%F0%9F%8E%A190@oneclickvpnkeys#%5BOpenRay%5D%20%F0%9F%87%B7%F0%9F%87%BA%20RU-35319
