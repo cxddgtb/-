@@ -1,1 +1,1 @@
-vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@67.220.85.46:18000?encryption=auto&security=none&type=tcp#@Alirewa-536
+vmess://e9c4ce52-9a78-4381-b6f8-23350bc4d606@143.198.219.182:80/?type=ws&encryption=auto&path=%2Fv2ray#hichkas%20ўЖЎ™
