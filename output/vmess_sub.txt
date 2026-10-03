@@ -1,2 +1,1 @@
-vmess://04621bae-ab36-11ec-b909-0242ac120002@85.90.217.42:22324?encryption=auto&type=tcp#🏳️
-vmess://04621bae-ab36-11ec-b909-0242ac120002@66.163.117.58:22324?encryption=auto&security=none&type=tcp#рҹҸҶ37@oneclickvpnkeys
+vmess://45b83519-9c4f-4052-a11b-02e017b636d4@47.244.120.197:36703?ed=2048&eh=Sec-WebSocket-Protocol&encryption=auto&path=/arki&security=none&type=ws#рҹ§®72@oneclickvpnkeys
