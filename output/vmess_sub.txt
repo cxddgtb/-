@@ -1,1 +1,2 @@
-vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@23.162.200.198:18000?encryption=auto&security=none&type=tcp#⚛️83@oneclickvpnkeys
+vmess://e9c4ce52-9a78-4381-b6f8-23350bc4d606@143.198.219.182:80/?type=ws&encryption=auto&path=%2Fv2ray#hichkas%20ўЖЎ™
+vmess://f8c8dc3d-0d37-46b0-8b34-a7232882fcfe@38.110.1.246:18000?encryption=auto&security=none&type=tcp#🕊️67@oneclickvpnkeys
