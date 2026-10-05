@@ -1,2 +1,2 @@
-hy2://1ab02865393bfa6d@5.161.213.184:443/?insecure=1&amp;sni=www.google.com&amp;obfs=salamander&amp;obfs-password=d5a9baeec9b61a44#%40TUICity%20%7CHYSTERIA%7C
-hy2://29794dae-06ca-4b62-94f2-220b5858d39b@hk-hkg-dc23-002.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20147%20-%20147
+hy2://gf1%3Agfhysteria2024@185.156.44.99:443?insecure=1&sni=whatsapp.com&type=tcp&allowInsecure=1&upmbps=10&downmbps=50#By
+hy2://cd74c0a406664a5bc0bac098220a2468@2.27.59.206:443?sni=de1.sferavpn.pro&obfs=salamander&obfs-password=44f1c1e2f8b99e792ceed574627a1eb0#hy2%2013%20-%2013
