@@ -1,2 +1,2 @@
-hy2://gf1%3Agfhysteria2024@185.156.44.99:443?insecure=1&sni=whatsapp.com&type=tcp&allowInsecure=1&upmbps=10&downmbps=50#By
-hy2://cd74c0a406664a5bc0bac098220a2468@2.27.59.206:443?sni=de1.sferavpn.pro&obfs=salamander&obfs-password=44f1c1e2f8b99e792ceed574627a1eb0#hy2%2013%20-%2013
+hy2://6aab8efdf13945829ae3699c342be406@31.76.80.69:443?sni=fiproxy1.lockdwn.com&obfs=salamander&obfs-password=uw9b2qq5rx#hy2%207%20-%207
+hy2://HowdyHysteria2023w0W@hysteria.udpgw.com:8443/?insecure=1&sni=sni-here.com&obfs=salamander&obfs-password=HysteriaHowdy#荷兰
