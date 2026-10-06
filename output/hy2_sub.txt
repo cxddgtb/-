@@ -1,3 +1,1 @@
-hy2://mkL3AfdSZIpTWRB9TcWPn9vywPGN89MRHg3ToRDj@91.196.32.163:443?insecure=1&sni=91.196.32.163#hysteria2-213095942
-hy2://https%3A%2F%2Fxship.2fa.cat@starlink-ft.251313.xyz:443?insecure=1&sni=www.cloudflare.com#hysteria2-233021043
-hy2://YutbgyXL1mGaSlBXDoEucWvYbrDCINgUcQ6R6_At5Pjr2xCc@45.192.12.93:443?sni=admin.wwwinternetvideo.click#hy2%203%20-%203
+hy2://29794dae-06ca-4b62-94f2-220b5858d39b@us-lax-dc12-002.node.valaccess.com:443?sni=na.node.valaccess.com&obfs=salamander&obfs-password=TB3NFWHCbuXajqux#hy2%20127%20-%20127
