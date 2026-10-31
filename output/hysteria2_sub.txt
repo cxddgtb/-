@@ -1,3 +1,1 @@
-hysteria2://gf1%3Agfhysteria2024@173.212.201.85:443/?insecure=1&sni=www.docker.com#By
-hysteria2://24266838d888d903594cc6e33910aeeb@2.28.226.197:443?sni=vpn.172908710.dpdns.org&obfs=salamander&obfs-password=27b960aa5b199a215c3a84fd4818e5d2#By
-hysteria2://418ddc75-aa9c-4e5d-a9a3-82c50a5a02b6@51.75.118.5:20222?sni=www.google.com&obfs=salamander&obfs-password=ad7088dafb02115c&insecure=1#By
+hysteria2://329e13e4-ee7c-4802-ac72-5fcab79c2402@217.60.72.225:443?sni=forshynewh.duckdns.org#02%20%F0%9F%8C%90%20Anycast-IP%20%7C%20%F0%9F%87%AC%F0%9F%87%A7%20%F0%9F%87%BA%F0%9F%87%B8%20%7C%20%5BBL%5D%20%7C%20mega%20vpn%20%40vpnsmegabot
