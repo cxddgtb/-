@@ -1,2 +1,1 @@
-hysteria2://gf1%3Agfhysteria2024@173.212.201.85:443/?insecure=1&sni=www.docker.com#By
-hysteria2://70043bfa-d6fb-4980-b27e-773e9e8b2004@141.0.187.15:443?sni=crt.onecloudstream.com#%5B1596%5D%F0%9F%8D%91%20%F0%9F%87%B7%F0%9F%87%BA%20RUS%20%5BH2%5D%20%F0%9F%8D%91%20%F0%9F%9A%80%20%23f26ee3
+hysteria2://8dOHZ13sx33R1/PQbhTK/w==@34.24.25.1:443?sni=bing.com&insecure=1#By
