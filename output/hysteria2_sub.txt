@@ -1,3 +1,2 @@
 hysteria2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?security=tls&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3&insecure=0&sni=hy2.aspidnet.xyz#By
-hysteria2://YV1sd3tfCZngTtnvRmy7@206.189.229.48:443?sni=www.microsoft.com&insecure=1&obfs=salamander&obfs-password=ZuPf4OcXKvotJdDxlTus#By
-hysteria2://02df03e3-3029-4c95-bffe-8f211b480672@edge.hankli1214.xyz:443/?sni=hank.hankli1214.xyz&obfs=salamander&obfs-password=MeJA9qgoYMH4UMunHowisrbd&upmbps=50&downmbps=500#By
+hysteria2://02df03e3-3029-4c95-bffe-8f211b480672@edge.hankli1214.xyz:443?security=tls&obfs=salamander&obfs-password=MeJA9qgoYMH4UMunHowisrbd&insecure=0&sni=hank.hankli1214.xyz#By
