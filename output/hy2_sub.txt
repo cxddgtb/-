@@ -1,1 +1,1 @@
-hy2://f40b1e441addaec3@45.76.44.57:443/?insecure=1&sni=google.co&obfs=salamander&obfs-password=2db7b42a#%40EUT_VPN%20%7C%20HYSTERIA%20%7C
+hy2://HowdyHysteria2023w0W@51.15.19.206:8443?insecure=1&obfs=salamander&obfs-password=HysteriaHowdy&sni=hysteria.udpgw.co#By
