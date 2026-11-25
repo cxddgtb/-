@@ -1,5 +1,5 @@
-hysteria2://gf1%3Agfhysteria2024@185.156.44.99:443?insecure=1&sni=185.156.44.99#By
-hysteria2://cdfb74db-f288-4271-960d-6d31c4ef75cc@gelendzhik.gosgenarchive.com:8443/?security=tls&sni=gelendzhik.gosgenarchive.com&fp=safari&alpn=h3&obfs=salamander&obfs-password=x9KvL2mP4nC72H3w&fm=%7B%22udp%22%3A%5B%7B%22type%22%3A%22salamander%22%2C%22settings%22%3A%7B%22password%22%3A%22x9KvL2mP4nC72H3w%22%2C%22packetSize%22%3A%22512-1200%22%7D%7D%5D%2C%22quicParams%22%3A%7B%22debug%22%3Afalse%2C%22congestion%22%3A%22bbr%22%7D%7D#%F0%9F%87%B5%F0%9F%87%B1%20%D0%9F%D0%BE%D0%BB%D1%8C%D1%88%D0%B0%20Auto%20%F0%9F%94%84%20Happ%2FIncy%20Hys2%20%7C%20proxy-pl-hys2-4%20%7C%20SOURCE%3Arun_20261109T140331_03_list3
-hysteria2://02df03e3-3029-4c95-bffe-8f211b480672@edge.hankli1214.xyz:443?security=tls&obfs=salamander&obfs-password=MeJA9qgoYMH4UMunHowisrbd&insecure=0&sni=hank.hankli1214.xyz#By
-hysteria2://fce629d692a7b1ad71a17dae29d8b3c6@172.87.24.53:8443?insecure=1&sni=hy2k2p.local#Бесплатный
-hysteria2://https%3A%2F%2Fxship.best@starlink-ft.251313.xyz:443?insecure=1&sni=xship.top#Бесплатный
+hysteria2://HowdyHysteria2023w0W@51.15.19.206:8443?sni=vk.com&obfs=salamander&obfs-password=HysteriaHowdy#%F0%9F%87%B3%F0%9F%87%B1%20%D0%9D%D0%B8%D0%B4%D0%B5%D1%80%D0%BB%D0%B0%D0%BD%D0%B4%D1%8B%20%2350
+hysteria2://QCgqi_I4EkV8UR-OgQ_tG4EnVTEVvIyR2GgRBzrIn2s@162.249.125.133:443?security=tls&obfs=salamander&obfs-password=c1b4086fea89914496c7e10967a419216566&insecure=0&sni=hy2-new.aspidnet.xyz#By
+hysteria2://VR7zICGZd3cB34G0FxSYQra3@82.152.161.146:10086?security=tls&insecure=0&pinSHA256=384dfd7165377a28b00c8feefed52b59abd376248b99d06495349c2ab24586bc&sni=pic.bstarstatic.com#By
+hysteria2://307ee0e53ea04dfd86a7f2f9fcd53844@130.49.163.188:443?sni=s5.libertyrunet.store#17%20%F0%9F%87%B7%F0%9F%87%B8%20%D1%81%D0%B5%D1%80%D0%B1%D0%B8%D1%8F%20%7C%20mega%20vpn%20%40vpnsmegabot
+hysteria2://30e52776-55ac-3cb4-8d36-e2910f07e2c3@s2486.wagahaha.xyz:443?insecure=1&sni=u695098u04af05e4s2473.xxti.top#🇸🇪
