@@ -1,1 +1,1 @@
-hy2://HowdyHysteria2023w0W@51.15.19.206:8443?insecure=1&obfs=salamander&obfs-password=HysteriaHowdy&sni=hysteria.udpgw.co#By
+hy2://e45c1654-9184-40c7-b68b-2929ce2a0a89@86.107.179.245:443?sni=cruises-cdn.travel-blogmir.blog#By

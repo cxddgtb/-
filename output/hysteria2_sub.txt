@@ -1,8 +1,5 @@
-hysteria2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@130.49.161.70:443?security=tls&obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3&insecure=0&sni=hy2.aspidnet.xyz#By
-hysteria2://cdfb74db-f288-4271-960d-6d31c4ef75cc@kemerovo.gosgenarchive.com:8443/?security=tls&sni=kemerovo.gosgenarchive.com&fp=safari&alpn=h3&obfs=salamander&obfs-password=x9KvL2mP4nC72H3w&fm=%7B%22udp%22%3A%5B%7B%22type%22%3A%22salamander%22%2C%22settings%22%3A%7B%22password%22%3A%22x9KvL2mP4nC72H3w%22%2C%22packetSize%22%3A%22512-1200%22%7D%7D%5D%2C%22quicParams%22%3A%7B%22debug%22%3Afalse%2C%22congestion%22%3A%22bbr%22%7D%7D#%F0%9F%87%B5%F0%9F%87%B1%20%D0%9F%D0%BE%D0%BB%D1%8C%D1%88%D0%B0%20Auto%20%F0%9F%94%84%20Happ%2FIncy%20Hys2%20%7C%20proxy-pl-hys2-2%20%7C%20SOURCE%3Arun_20261109T140331_03_list3
-hysteria2://5646b5cf-9844-446f-80cf-ccdefb1ba23a@vieee.observation.today:443?security=tls&sni=vie.observation.today&alpn=h3&insecure=0#🇩🇪
-hysteria2://gf1:gfhysteria2024@66.94.121.46:443?sni=vk.com#%F0%9F%87%BA%F0%9F%87%B8%20%D0%A1%D0%A8%D0%90%20%2310
-hysteria2://gf1%3Agfhysteria2024@5.129.235.85:443?sni=t.me&pinSHA256=bf2f114d1b943f2fd423745d05dbbdea284e2f58b31aa428c45c7775ca847db3#%5BOpenRay%5D%20%F0%9F%87%B3%F0%9F%87%B1NL-321
-hysteria2://HowdyHysteria2023w0W@51.15.19.206:8443/?sni=vk.com&obfs=salamander&obfs-password=HysteriaHowdy&insecure=1#🇩🇪
-hysteria2://YV1sd3tfCZngTtnvRmy7@206.189.229.48:443?sni=www.microsoft.com&insecure=1&obfs=salamander&obfs-password=ZuPf4OcXKvotJdDxlTus#🇺🇸
-hysteria2://p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR@hy2.aspidnet.xyz:443/?obfs=salamander&obfs-password=rG07s3COMIEvdnQipRyWzx_H_2xygNC3#By
+hysteria2://gf1%3Agfhysteria2024@185.156.44.99:443?insecure=1&sni=185.156.44.99#By
+hysteria2://cdfb74db-f288-4271-960d-6d31c4ef75cc@gelendzhik.gosgenarchive.com:8443/?security=tls&sni=gelendzhik.gosgenarchive.com&fp=safari&alpn=h3&obfs=salamander&obfs-password=x9KvL2mP4nC72H3w&fm=%7B%22udp%22%3A%5B%7B%22type%22%3A%22salamander%22%2C%22settings%22%3A%7B%22password%22%3A%22x9KvL2mP4nC72H3w%22%2C%22packetSize%22%3A%22512-1200%22%7D%7D%5D%2C%22quicParams%22%3A%7B%22debug%22%3Afalse%2C%22congestion%22%3A%22bbr%22%7D%7D#%F0%9F%87%B5%F0%9F%87%B1%20%D0%9F%D0%BE%D0%BB%D1%8C%D1%88%D0%B0%20Auto%20%F0%9F%94%84%20Happ%2FIncy%20Hys2%20%7C%20proxy-pl-hys2-4%20%7C%20SOURCE%3Arun_20261109T140331_03_list3
+hysteria2://02df03e3-3029-4c95-bffe-8f211b480672@edge.hankli1214.xyz:443?security=tls&obfs=salamander&obfs-password=MeJA9qgoYMH4UMunHowisrbd&insecure=0&sni=hank.hankli1214.xyz#By
+hysteria2://fce629d692a7b1ad71a17dae29d8b3c6@172.87.24.53:8443?insecure=1&sni=hy2k2p.local#Бесплатный
+hysteria2://https%3A%2F%2Fxship.best@starlink-ft.251313.xyz:443?insecure=1&sni=xship.top#Бесплатный
